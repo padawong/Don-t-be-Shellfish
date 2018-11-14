@@ -1,3 +1,20 @@
+
+MUST USE MARKDOWN FORMATTING LANGUAGE FOR THIS FILE; NOT YET IMPLEMENTED
+
+
+
+CS100, FALL 2018
+ERIN WONG
+NIVEDHA KARTHIKEYAN
+
+Assignment 2
+
+LIST OF KNOWN BUGS:
+- 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 # Assignment 1 -- Creating a Design Document
 
 **Note: All assignments must be done with *exactly* one partner.**
