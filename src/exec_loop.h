@@ -11,7 +11,7 @@ rshell_loop(){
         cout << "$ ";
         line = rshell_read();
         args = rshell_split();
-        status = rshell_execute(args);
+        cont = rshell_execute(args);
 
         //idk how to clear these variables after each iteration since 
         //they are pointers
