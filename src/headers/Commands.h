@@ -10,8 +10,8 @@ class Commands {
         Commands() {}
         Commands(std::string command_in) : cmd(command_in) {}
         
-        //bool success;
-        //bool exit;
+        bool success = true;
+        bool exit = false;
         
         //virtual bool parse() = 0;
         virtual bool execute(/*Commands* cmdptr*/) = 0;

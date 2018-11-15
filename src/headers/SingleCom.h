@@ -19,7 +19,6 @@ class SingleCom : public Commands {
         bool execute();
 
         std::vector <std::string> commands_vect;
-        bool exit = false;
 };
 
 #endif // SINGLECOM_H
