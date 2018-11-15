@@ -1,7 +1,8 @@
 #include <iostream> 
 #include <string>
 #include "./headers/CompositeCom.h"
-
+#include <unistd.h> //NEW
+#include <limits.h> //NEW
 
 
 int main () {
@@ -16,6 +17,17 @@ int main () {
 
     // Start a main command loop    
     do{
+        
+        //store host name and username 
+        char hostname[HOST_NAME_MAX];
+        char username[LOGIN_NAME_MAX];
+                            
+        gethostname(hostname , HOST_NAME_MAX);
+        getlogin_r(username, LOGIN_NAME_MAX);
+                                               
+        std::cout << username;
+        std::cout << "@";
+        std::cout << hostname;
         //print money
         std::cout << "$ ";
         
