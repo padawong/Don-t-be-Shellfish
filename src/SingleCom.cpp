@@ -1,15 +1,13 @@
-#ifndef SINGLECOM_H
-#define SINGLECOM_H
+#include "/headers/SingleCom.h"
 
-#include "Commands.h"
+SingleCom::SingleCom() {}
+SingleCom::SingleCom(std::string command_in) : Commands(command_in) {}
 
-class SingleCom : public Commands {
-    public:
-        SingleCom() {}
-        SingleCom(std::string command_in) : Commands(command_in) {}
-        
-        Commands* parse();
-        int execute();
-};
+bool SingleCom::parse() {
+    return true;
+}
 
-#endif // SINGLECOM_H
+bool SingleCom::execute() {
+    return true;
+}
+
