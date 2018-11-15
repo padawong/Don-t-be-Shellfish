@@ -1,17 +1,12 @@
 #include "/headers/CompositeCom.h"
 
-class CompositeCom : public Commands {
-    protected:
-        //Commands* left;
-        //Commands* right;
+CompositeCom::CompositeCom() {}
+CompositeCom::CompositeCom(std::string command_in) : Commands(command_in) {}
 
-    public:
-        CompositeCom() {}
-        CompositeCom(std::string command_in) : Commands(command_in) {}
-        //CompositeCom(std::string command_in, Commands* l, Commands* r) : Commands(command_in), left(l), right(r) {}
-        
-        bool parse();
-        bool execute();
-};
+bool CompositeCom::parse() {
 
-#endif // COMPOSITECOM_H
+}
+
+bool CompositeCom::execute() {
+
+}

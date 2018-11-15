@@ -9,9 +9,9 @@ class CompositeCom : public Commands {
         Commands* right;
 
     public:
-        CompositeCom() {} 
-        CompositeCom(std::string command_in) : Commands(command_in) {}
-        CompositeCom(std::string command_in, Commands* l, Commands* r) : Commands(command_in), left(l), right(r) {}
+        CompositeCom(); 
+        CompositeCom(std::string command_in);
+        // CompositeCom(std::string command_in, Commands* l, Commands* r) : Commands(command_in), left(l), right(r) {}
         
         Commands* parse();
         int execute();
