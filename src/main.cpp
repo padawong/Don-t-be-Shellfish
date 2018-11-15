@@ -26,6 +26,7 @@ int main () {
         //Pass to Commands constructor
         CompositeCom* newCommand = new CompositeCom(cmd); 
         newCommand->parse();
+        newCommand->execute();
         
     } while(!isExit);  // Determine when to exit 
 

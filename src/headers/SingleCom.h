@@ -4,6 +4,11 @@
 #include "Commands.h"
 #include <string>
 #include <vector>
+#include <unistd.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <iostream>
 
 class SingleCom : public Commands {
     public:

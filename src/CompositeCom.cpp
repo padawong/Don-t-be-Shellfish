@@ -17,35 +17,50 @@ void CompositeCom::parse() {
 
     // Create an array of char the size of our input command line
     char str[cmd.size()];
+    strcpy(str, cmd.c_str());
+
     char* point;
 
     std::vector<std::string> vstring;
 
     //Delimiter is a space
-    point = strtok(str, " ");
+    point = strtok(str, " \n");
 
     // Add the first token to the first vector
-    std::string s(point);
-    vstring.push_back(s);
+    //std::string s(point);
+    //vstring.push_back(s);
 
     //Main strtok loop 
     while(point != NULL){
-    
+   
+        // TEST REMOVE
+        //std::cout << "WITHIN WHILE LOOP" << std::endl;
+
         //Casting the char ptr to a string 
         std::string temp(point);
 
         // If comment flag is found, discontinue while loop to process commands stored in vector
         if (temp.at(0) == '#') {
             break;
+
+
+            // TEST REMOVE
+            //std::cout << "IN # CASE" << std::endl;
         }
 
         // If connector found, append to vector of strings, then append that vector to the vector of vectors
         if (temp.at(0) == '&' || temp.at(0) == '|') {
             commands_vector.push_back(vstring);
             
+            // TEST REMOVE
+            //std::cout << "FOUND & OR |. TEMP IS: " << temp << std::endl;
+
             // The FIRST element in the NEXT vector will be the connector 
             vstring.clear();
             vstring.push_back(temp);
+        
+            // TEST REMOVE
+            //std::cout << "IN &| CASE" << std::endl;
         }
 
         // If a string ends with a semicolon, append the word to the current vector, but begin the next vector
@@ -55,12 +70,22 @@ void CompositeCom::parse() {
             temp.pop_back();
 
             vstring.push_back(temp);
+            commands_vector.push_back(vstring);
 
             vstring.clear();
+
+        // TEST REMOVE
+        //std::cout << "IN ; CASE" << std::endl;
+            
         }
 
         else {
             vstring.push_back(temp);
+        
+       
+            // TEST REMOVE
+            //std::cout << "IN ELSE CASE" << std::endl;
+         
         }
 
         //Appending string to vector
@@ -69,6 +94,21 @@ void CompositeCom::parse() {
         //Moving onto next command w/ strtok     
         point = strtok(NULL, " ");
     }
+
+    // Add final string vector to vector vector
+    commands_vector.push_back(vstring);
+
+    // TEST REMOVE
+    //std::cout << "HELLO" << std::endl;
+    //std::cout << commands_vector.size() << std::endl;
+    
+    /* TEST REMOVE
+    for (int i = 0; i < commands_vector.size(); i++) {
+        for (int j = 0; j < commands_vector.at(i).size(); j++) {
+            std::cout << commands_vector.at(i).at(j);
+        }
+    } std::cout << "\n\n";
+    */
 }
 
 // Calls execute on each vector of string
@@ -77,8 +117,19 @@ bool CompositeCom::execute(/*Commands* cmdptr*/) {
     int counter = 0;
     bool abort = false;
     while (counter < commands_vector.size() && !abort) {
+        
+        
+        //TEST REMOVE
+        //std::cout << "IN COMPOSITE EXECUTE WHILE LOOP" << std::endl;
+        
+        
         // Constructs new single command instance, passing in the current command in the form of a vector of strings
         SingleCom* single = new SingleCom(commands_vector.at(counter));
+
+
+        // TEST REMOVE
+        //std::cout << "SINGLE EXECUTE NOT YET CALLED" << std::endl;
+
 
         bool exec_failed;
         exec_failed = single->execute();
@@ -90,19 +141,23 @@ bool CompositeCom::execute(/*Commands* cmdptr*/) {
 
         
         // && case
-        // If the current command returned false
-        //    and the next command begins with &&
-        //    Stop executing
-        if (commands_vector.at(counter + 1).at(0) == "&&" && exec_failed) {
-            return false;
+        // If there are more commands and the current command returned true, proceed to next command
+        // If the current command returned false and the next command begins with &&, stop executing
+        if (commands_vector.size() + 1 < counter && commands_vector.at(counter + 1).at(0) == "&&") {
+            if (exec_failed)
+                return false;
+            else
+                counter++;
         }
 
         // || case
-        // If the current command returned true
-        //    and the next command begins with ||
-        //    Stop executing
-        else if (commands_vector.at(counter + 1).at(0) == "||" && !exec_failed) {
-            return false;
+        // If there are more commands and the current command returned false, proceed to next command
+        // If the current command returned true and the next command begins with ||, stop executing
+        else if (commands_vector.size() + 1 < counter && commands_vector.at(counter + 1).at(0) == "||") {
+            if (!exec_failed)
+                return false;
+            else
+                counter++;
         }
         
         // Increment to progress to next command
