@@ -5,12 +5,12 @@
 
 class CompositeCom : public Commands {
     protected:
-        Command* left;
-        Command* right;
+        Commands* left;
+        Commands* right;
 
     public:
         CompositeCom() {}
-        CompositeCom(std::string command_in, Command* l, Command, r) : Commands(command_in), left(l), right(r) {}
+        CompositeCom(std::string command_in, Commands* l, Commands* r) : Commands(command_in), left(l), right(r) {}
         
         Commands* parse();
         int execute();
