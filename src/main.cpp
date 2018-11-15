@@ -1,6 +1,6 @@
 #include <iostream> 
 #include <string>
-#include "CompositeCom.h"
+#include "./headers/CompositeCom.h"
 
 
 
