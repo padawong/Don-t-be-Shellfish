@@ -2,6 +2,7 @@
 #define COMPOSITECOM_H
 
 #include "Commands.h"
+#include "SingleCom.h"
 #include <vector>
 
 class CompositeCom : public Commands {

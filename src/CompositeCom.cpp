@@ -40,12 +40,25 @@ void CompositeCom::parse() {
         }
 
         // If connector found, append to vector of strings, then append that vector to the vector of vectors
-        if (temp.at(0) == '&' || temp.at(0) == '|' || temp.at(temp.size() - 1) == ';') {
-            // The last element in the current vector will be the connector 
-               // OR POSSIBLY A WORD FOLLOWED BY A SEMICOLON
-            vstring.push_back(temp);
+        if (temp.at(0) == '&' || temp.at(0) == '|') {
             commands_vector.push_back(vstring);
+            
+            // The FIRST element in the NEXT vector will be the connector 
+            vstring.clear();
+            vstring.push_back(temp);
         }
+
+        // If a string ends with a semicolon, append the word to the current vector, but begin the next vector
+        // ; is not saved at all because its presence is unnecessary
+        else if (temp.at(temp.size() - 1) == ';') {
+            // Remove the semicolon from the string
+            temp.pop_back();
+
+            vstring.push_back(temp);
+
+            vstring.clear();
+        }
+
         else {
             vstring.push_back(temp);
         }
@@ -56,23 +69,46 @@ void CompositeCom::parse() {
         //Moving onto next command w/ strtok     
         point = strtok(NULL, " ");
     }
-
-
-/*    int counter = 0;
-    bool cmdSuccess = true;
-    while(counter < vstring.size() && cmdSuccess ){
-        
-         
-        Commands* newCommand = new SingleCom()
-        
-        cmdSuccess = newCommand->parse();        
-        counter++;
-    }
-*/
 }
 
 // Calls execute on each vector of string
-// Responds appropriately to the connectors
+// Responds appropriately to the connectors based on the return values of SingleCom execute
 bool CompositeCom::execute(/*Commands* cmdptr*/) {
-    
+    int counter = 0;
+    bool abort = false;
+    while (counter < commands_vector.size() && !abort) {
+        // Constructs new single command instance, passing in the current command in the form of a vector of strings
+        SingleCom* single = new SingleCom(commands_vector.at(counter));
+
+        bool exec_failed;
+        exec_failed = single->execute();
+
+        // If single runs "exit", exit.
+        if (single->exit) { 
+            return false;
+        } 
+
+        
+        // && case
+        // If the current command returned false
+        //    and the next command begins with &&
+        //    Stop executing
+        if (commands_vector.at(counter + 1).at(0) == "&&" && exec_failed) {
+            return false;
+        }
+
+        // || case
+        // If the current command returned true
+        //    and the next command begins with ||
+        //    Stop executing
+        else if (commands_vector.at(counter + 1).at(0) == "||" && !exec_failed) {
+            return false;
+        }
+        
+        // Increment to progress to next command
+        counter++;
+        
+        // Is this how we avoid memory leaks?
+        delete single;
+    }
 }

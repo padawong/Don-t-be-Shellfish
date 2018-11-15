@@ -7,6 +7,7 @@ SET(CMAKE_CXX_STANDARD 11)
 ADD_EXECUTABLE(rshell
 	./src/main.cpp
     ./src/CompositeCom.cpp
+    ./src/SingleCom.cpp
 )
 
 ADD_EXECUTABLE(test
