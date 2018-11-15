@@ -7,8 +7,8 @@ class Commands {
     protected:
         std::string cmd;
     public:
-        Commands() {};
-        Commands(std::string command_in) {};
+        Commands() {}
+        Commands(std::string command_in) {}
         
         bool success;
         bool exit;

@@ -5,8 +5,8 @@
 
 class SingleCom : public Commands {
     public:
-        SingleCom() {};
-        SingleCom(std::string command_in) : Commands(command_in) {};
+        SingleCom() {}
+        SingleCom(std::string command_in) : Commands(command_in) {}
         
         Commands* parse();
         int execute();
