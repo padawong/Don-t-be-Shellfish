@@ -1,11 +1,13 @@
-#include "/headers/SingleCom.h"
+#include "./headers/SingleCom.h"
 
 SingleCom::SingleCom() {}
-SingleCom::SingleCom(std::string command_in) : Commands(command_in) {}
+SingleCom(std::vector<std::string> cmd_v) : Commands(), commands_vect(cmd_v) {}
 
+/*
 bool SingleCom::parse() {
     return true;
 }
+*/
 
 bool SingleCom::execute() {
     return true;

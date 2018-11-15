@@ -24,10 +24,10 @@ int main () {
         std::getline(std::cin, cmd);
 
         //Pass to Commands constructor
-        Commands* newCommand = new CompositeCom(cmd);    
-        bool isExit = newCommand->parse(); // parse() will only return false if "exit" command detected
-
-    }while(!isExit);  // Determine when to exit 
+        CompositeCom* newCommand = new CompositeCom(cmd); 
+        newCommand->parse();
+        
+    } while(!isExit);  // Determine when to exit 
 
   
     return 0;

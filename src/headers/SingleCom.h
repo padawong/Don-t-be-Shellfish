@@ -6,10 +6,12 @@
 class SingleCom : public Commands {
     public:
         SingleCom();
-        SingleCom(std::string command_in);
+        SingleCom(std::vector<std::string> cmd_v);
         
-        bool parse();
+        //bool parse();
         bool execute();
+
+        std::vector<std::string> commands_vect;
 };
 
 #endif // SINGLECOM_H

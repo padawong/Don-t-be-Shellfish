@@ -13,7 +13,7 @@ class Commands {
         //bool success;
         //bool exit;
         
-        virtual bool parse() = 0;
+        //virtual bool parse() = 0;
         virtual bool execute(/*Commands* cmdptr*/) = 0;
 };
 

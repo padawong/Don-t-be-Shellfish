@@ -8,19 +8,17 @@ CompositeCom::CompositeCom() {}
 CompositeCom::CompositeCom(std::string command_in) : Commands(command_in) {}
 
 /* This gets tricky.
- * We make a vector of string vectors. Each string vector contains one full command.
+ * We use a vector of string vectors. Each string vector contains one full command.
  * As we use strtok to generate these vectors, it is checking for connectors or the comment flag.
  * If the connectors are found, we pushback the vector string onto the vector of vectors.
  * If the comment flag is found, we break from the strtok process and proceed to executing the commands now in the vector of vectors.
  */
-bool CompositeCom::parse() {
+void CompositeCom::parse() {
 
     // Create an array of char the size of our input command line
     char str[cmd.size()];
     char* point;
 
-    //vector to hold all our commands 
-    std::vector< std::vector<std::string> > vector_vector;
     std::vector<std::string> vstring;
 
     //Delimiter is a space
@@ -46,7 +44,7 @@ bool CompositeCom::parse() {
             // The last element in the current vector will be the connector 
                // OR POSSIBLY A WORD FOLLOWED BY A SEMICOLON
             vstring.push_back(temp);
-            vector_vector.push_back(vstring);
+            commands_vector.push_back(vstring);
         }
         else {
             vstring.push_back(temp);
@@ -73,6 +71,8 @@ bool CompositeCom::parse() {
 */
 }
 
+// Calls execute on each vector of string
+// Responds appropriately to the connectors
 bool CompositeCom::execute(/*Commands* cmdptr*/) {
-    return true;
+    
 }

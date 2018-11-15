@@ -2,6 +2,7 @@
 #define COMPOSITECOM_H
 
 #include "Commands.h"
+#include <vector>
 
 class CompositeCom : public Commands {
     protected:
@@ -13,8 +14,10 @@ class CompositeCom : public Commands {
         CompositeCom(std::string command_in);
         // CompositeCom(std::string command_in, Commands* l, Commands* r) : Commands(command_in), left(l), right(r) {}
         
-        bool parse();
+        void parse();
         bool execute();
+
+        std::vector< std::vector<std::string> > commands_vector;
 };
 
 #endif // COMPOSITECOM_H
