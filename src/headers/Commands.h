@@ -8,13 +8,13 @@ class Commands {
         std::string cmd;
     public:
         Commands() {}
-        Commands(std::string command_in) {}
+        Commands(std::string command_in) : cmd(command_in) {}
         
         //bool success;
         //bool exit;
         
         virtual bool parse() = 0;
-        virtual bool execute() = 0;
+        virtual bool execute(/*Commands* cmdptr*/) = 0;
 };
 
 #endif // COMMANDS_H
