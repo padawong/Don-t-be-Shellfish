@@ -15,7 +15,7 @@ bool SingleCom::execute() {
         std::cout << commands_vect.at(i);
     }*/
     
-    
+    bool success = true;
     
     // "exit" command is quite strict; must be the only string in the vector, and it must be lowercase as shown in assn2 instructions
     if (commands_vect.size() == 1 && commands_vect.at(0) == "exit") {
@@ -42,8 +42,17 @@ bool SingleCom::execute() {
     if (pid == 0) {
         // If the command returns an error, call perror
         if (execvp(args[0], args) == -1) {
+             
+            
+            // TEST REMOVE
+            //std::cout << "EXECVP == -1" << std::endl;
+
+
+            success = false;
+
             perror("Invalid command");
-            return false;
+            
+            //return false;
         }
     }
 
@@ -51,14 +60,17 @@ bool SingleCom::execute() {
     if (pid > 0) {
         // since child pid = 0, we are waiting for child = 0
         if (wait(0) == -1) {
+            success = false;
             perror("Parent wait failed");
-            return false;
+            //return false;
         }
     }
 
     // TEST REMOVE
     //std::cout << "About to return from single execute to composite execute" << std::endl;
+    //std::cout << "success = " << success << std::endl;
+    
 
-    return true;
+    return success;
 }
 

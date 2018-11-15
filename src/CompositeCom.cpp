@@ -98,41 +98,49 @@ void CompositeCom::parse() {
     // Add final string vector to vector vector
     commands_vector.push_back(vstring);
 
-    // TEST REMOVE
+    // TEST REMOV               break;E
     //std::cout << "HELLO" << std::endl;
     //std::cout << commands_vector.size() << std::endl;
     
-    /* TEST REMOVE
-    for (int i = 0; i < commands_vector.size(); i++) {
+    // TEST REMOVE
+    /*for (int i = 0; i < commands_vector.size(); i++) {
         for (int j = 0; j < commands_vector.at(i).size(); j++) {
             std::cout << commands_vector.at(i).at(j);
         }
-    } std::cout << "\n\n";
-    */
+    } std::cout << "\n\n" << std::endl;*/
 }
 
 // Calls execute on each vector of string
 // Responds appropriately to the connectors based on the return values of SingleCom execute
 bool CompositeCom::execute(/*Commands* cmdptr*/) {
     int counter = 0;
-    bool abort = false;
-    while (counter < commands_vector.size() && !abort) {
-        
-        
-        //TEST REMOVE
-        //std::cout << "IN COMPOSITE EXECUTE WHILE LOOP" << std::endl;
-        
+    
+    // Flag detects if commands should continue or not
+    // if not, return false to end execute function
+    bool continue_exec = true;
+
+    // Flag detects connectors and skips the first element of the string vector if true
+    bool skip_conn = false;
+
+    while (counter < commands_vector.size() && continue_exec) {
+
+        // TEST REMOVE
+        std::cout << "BEGINNING OF WHILE LOOP. continue_exec = " << continue_exec << std::endl;
+
+        // If skip_conn flag is true, remove the first element from the string vector which is a connector
+        // IDEALLY THIS LOGIC WOULD BE FIXED SO THAT THE CONNECTORS WERE THE LAST ELEMENT OF AN ARRAY MAYBE
+        // THAT WAY IF FALSE, CAN JUST END, BUT THERE WOULD STILL BE SOME TRICKY, INELEGANT STUFF WITH THAT TOO
+        if (skip_conn) {
+            commands_vector.at(counter).erase(commands_vector.at(counter).begin());
+        }
         
         // Constructs new single command instance, passing in the current command in the form of a vector of strings
         SingleCom* single = new SingleCom(commands_vector.at(counter));
 
+        bool exec_success = single->execute();
 
         // TEST REMOVE
-        //std::cout << "SINGLE EXECUTE NOT YET CALLED" << std::endl;
-
-
-        bool exec_failed;
-        exec_failed = single->execute();
+        //std:: cout << "\n SINGLE->EXECUTE = " << exec_failed << std::endl;
 
         // If single runs "exit", exit.
         if (single->exit) { 
@@ -143,28 +151,71 @@ bool CompositeCom::execute(/*Commands* cmdptr*/) {
         // && case
         // If there are more commands and the current command returned true, proceed to next command
         // If the current command returned false and the next command begins with &&, stop executing
-        if (commands_vector.size() + 1 < counter && commands_vector.at(counter + 1).at(0) == "&&") {
-            if (exec_failed)
+        if (counter + 1 < commands_vector.size() && commands_vector.at(counter + 1).at(0) == "&&") {
+            if (!exec_success) {
+                
+                // TEST REMOVE
+                std::cout << "&& case found, !exec_success. setting false and breaking" <<  std::endl;
+                
+                
+                continue_exec = false;
+
+                // TEST REMOVE
+                std::cout << "still within && case; continue_exec = " << continue_exec << std::endl;
+                std::cout << "Returning false now.\n" << std::endl;
+
+
+                break;
+                // return false;
+            }
+            else {
+                skip_conn = true;
+            }
+            if(!exec_success) {
                 return false;
-            else
-                counter++;
+                break;
+            }    
+
+            // TEST REMOVE
+            std::cout << "end of if; continue_exec = " << continue_exec << std::endl;
+
+   
+   
+            if (!continue_exec) {
+            return false;
         }
+
+       }
 
         // || case
         // If there are more commands and the current command returned false, proceed to next command
         // If the current command returned true and the next command begins with ||, stop executing
-        else if (commands_vector.size() + 1 < counter && commands_vector.at(counter + 1).at(0) == "||") {
-            if (!exec_failed)
+        else if (counter + 1 < commands_vector.size() && commands_vector.at(counter + 1).at(0) == "||") {
+            if (!exec_success) {
+                continue_exec = false;
                 return false;
-            else
-                counter++;
+            }
+            else {
+                skip_conn = true;
+            }
         }
-        
+ 
+
+        // TEST REMOVE
+        std::cout << "End of while loop BEFORE COUNTER++ AND DELETE SINGLE. continue_exec is: " << continue_exec << "\n" << std::endl;
+       
         // Increment to progress to next command
         counter++;
         
         // Is this how we avoid memory leaks?
-        delete single;
+        //delete single;
+
+
+        // TEST REMOVE
+        std::cout << "END OF WHILE LOOP. continue_exec: " << continue_exec << "\n" << std::endl;
     }
-    return true;
+
+    // TEST 
+
+    return continue_exec;
 }
