@@ -10,7 +10,7 @@ int main () {
     // 2) Interpret and execute commands
     // 3) How/when to terminate
    
-    bool isExit = false;
+    bool continue_loop = true;
     std::string cmd; 
 
 
@@ -26,9 +26,9 @@ int main () {
         //Pass to Commands constructor
         CompositeCom* newCommand = new CompositeCom(cmd); 
         newCommand->parse();
-        newCommand->execute();
+        continue_loop = newCommand->execute();
         
-    } while(!isExit);  // Determine when to exit 
+    } while(continue_loop);  // Determine when to exit 
 
   
     return 0;

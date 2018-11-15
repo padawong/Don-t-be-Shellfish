@@ -166,4 +166,5 @@ bool CompositeCom::execute(/*Commands* cmdptr*/) {
         // Is this how we avoid memory leaks?
         delete single;
     }
+    return true;
 }
