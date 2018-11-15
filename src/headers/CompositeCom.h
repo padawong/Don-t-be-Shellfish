@@ -9,9 +9,8 @@ class CompositeCom : public Commands {
         Command* right;
 
     public:
-        CompositeCom() {};
-        CompositeCom(std::string command_in) : Commands(command_in) {};
-        // I think we need a constructor that takes in the left and right commands
+        CompositeCom() {}
+        CompositeCom(std::string command_in, Command* l, Command, r) : Commands(command_in), left(l), right(r) {}
         
         Commands* parse();
         int execute();
