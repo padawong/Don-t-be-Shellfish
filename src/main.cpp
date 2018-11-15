@@ -29,12 +29,6 @@ int main () {
 
     }while(!isExit);  // Determine when to exit 
 
-
-
-<<<<<<< HEAD
-    // Determine when to exit 
   
-=======
->>>>>>> editMain
     return 0;
 }
