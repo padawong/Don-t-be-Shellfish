@@ -10,11 +10,11 @@ class Commands {
         Commands() {}
         Commands(std::string command_in) {}
         
-        bool success;
-        bool exit;
+        //bool success;
+        //bool exit;
         
-        virtual Commands* parse() = 0;
-        virtual int execute() = 0;
+        virtual bool parse() = 0;
+        virtual bool execute() = 0;
 };
 
 #endif // COMMANDS_H

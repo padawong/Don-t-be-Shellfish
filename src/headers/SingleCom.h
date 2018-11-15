@@ -8,8 +8,8 @@ class SingleCom : public Commands {
         SingleCom() {}
         SingleCom(std::string command_in) : Commands(command_in) {}
         
-        Commands* parse();
-        int execute();
+        bool parse();
+        bool execute();
 };
 
 #endif // SINGLECOM_H
