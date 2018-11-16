@@ -26,41 +26,23 @@ void CompositeCom::parse() {
     //Delimiter is a space
     point = strtok(str, " \n");
 
-    // Add the first token to the first vector
-    //std::string s(point);
-    //vstring.push_back(s);
-
     //Main strtok loop 
     while(point != NULL){
-
-        // TEST REMOVE
-        //std::cout << "WITHIN WHILE LOOP" << std::endl;
-
         //Casting the char ptr to a string 
         std::string temp(point);
 
         // If comment flag is found, discontinue while loop to process commands stored in vector
         if (temp.at(0) == '#') {
             break;
-
-
-            // TEST REMOVE
-            //std::cout << "IN # CASE" << std::endl;
         }
 
         // If connector found, append to vector of strings, then append that vector to the vector of vectors
         if (temp.at(0) == '&' || temp.at(0) == '|') {
             commands_vector.push_back(vstring);
 
-            // TEST REMOVE
-            //std::cout << "FOUND & OR |. TEMP IS: " << temp << std::endl;
-
             // The FIRST element in the NEXT vector will be the connector 
             vstring.clear();
             vstring.push_back(temp);
-
-            // TEST REMOVE
-            //std::cout << "IN &| CASE" << std::endl;
         }
 
         // If a string ends with a semicolon, append the word to the current vector, but begin the next vector
@@ -73,19 +55,10 @@ void CompositeCom::parse() {
             commands_vector.push_back(vstring);
 
             vstring.clear();
-
-        // TEST REMOVE
-        //std::cout << "IN ; CASE" << std::endl;
-
         }
 
         else {
             vstring.push_back(temp);
-
-
-            // TEST REMOVE
-            //std::cout << "IN ELSE CASE" << std::endl;
-
         }
 
         //Appending string to vector
@@ -97,17 +70,6 @@ void CompositeCom::parse() {
 
     // Add final string vector to vector vector
     commands_vector.push_back(vstring);
-
-    // TEST REMOV               break;E
-    //std::cout << "HELLO" << std::endl;
-    //std::cout << commands_vector.size() << std::endl;
-
-    // TEST REMOVE
-    /*for (int i = 0; i < commands_vector.size(); i++) {
-        for (int j = 0; j < commands_vector.at(i).size(); j++) {
-            std::cout << commands_vector.at(i).at(j);
-        }
-    } std::cout << "\n\n" << std::endl;*/
 }
 
 // Calls execute on each vector of string
@@ -121,10 +83,6 @@ bool CompositeCom::execute(/*Commands* cmdptr*/) {
     
     int count;
     for (int i = 0; i < commands_vector.size(); i++) {
-
-        // TEST REMOVE
-        //std::cout << "BEGINNING OF WHILE LOOP. continue_exec = " << continue_exec << std::endl;
-
         // If skip_conn flag is true, remove the first element from the string vector which is a connector
         // IDEALLY THIS LOGIC WOULD BE FIXED SO THAT THE CONNECTORS WERE THE LAST ELEMENT OF AN ARRAY MAYBE
         // THAT WAY IF FALSE, CAN JUST END, BUT THERE WOULD STILL BE SOME TRICKY, INELEGANT STUFF WITH THAT TOO
@@ -134,19 +92,19 @@ bool CompositeCom::execute(/*Commands* cmdptr*/) {
         }
 
         // TEST REMOVE
-    for (int u = 0; u < commands_vector.size(); u++) {
-        for (int j = 0; j < commands_vector.at(u).size(); j++) {
-            std::cout << commands_vector.at(u).at(j);
-        }
-    } std::cout << "\n\n" << std::endl;
+        /*for (int u = 0; u < commands_vector.size(); u++) {
+            std::cout << "\n Vect vect #" << u << std::endl;
+            for (int j = 0; j < commands_vector.at(u).size(); j++) {
+                std::cout << commands_vector.at(u).at(j);
+            }
+        } std::cout << "\n\n" << std::endl;
+*/
+
 
         // Constructs new single command instance, passing in the current command in the form of a vector of strings
         SingleCom* single = new SingleCom(commands_vector.at(i));
 
         bool exec_success = single->execute();
-
-        // TEST REMOVE
-        //std:: cout << "\n SINGLE->EXECUTE = " << exec_failed << std::endl;
 
         // If single runs "exit", exit.
         if (single->exit) {
@@ -161,66 +119,41 @@ bool CompositeCom::execute(/*Commands* cmdptr*/) {
         if (i + 1 < commands_vector.size() && commands_vector.at(i + 1).at(0) == "&&") {
             if (!exec_success) {
                 // TEST REMOVE
-                std::cout << "&& case found, !exec_success. setting false and breaking" <<  std::endl;
+                //std::cout << "&& case found, !exec_success. setting false and breaking" <<  std::endl;
 
 
                 continue_exec = false;
 
 
-                // TEST REMOVE
-                std::cout << "still within && case; continue_exec = " << continue_exec << std::endl;
-                std::cout << "Returning false now.\n" << std::endl;
                 this->success = false;
                 return false;
             }
             else {
                 skip_conn = true;
             }
-
-            // TEST REMOVE
-            std::cout << "end of if; continue_exec = " << continue_exec << std::endl;
-
-
-            /* 
-            if (!continue_exec) {
-            return false;
-            }
-*/
        }
 
         // || case
         // If there are more commands and the current command returned false, proceed to next command
         // If the current command returned true and the next command begins with ||, stop executing
         else if (i + 1 < commands_vector.size() && commands_vector.at(i + 1).at(0) == "||") {
-            if (!exec_success) {
+            if (exec_success) {
+                // TEST REMOVE
+                //std::cout << "|| case found, !exec_success. setting false and breaking" <<  std::endl;
+
+
+                continue_exec = false;
+
+
                 this->success = false;
-                //continue_exec = false;
                 return false;
+
             }
             else {
                 skip_conn = true;
             }
         }
-
-
-        // TEST REMOVE
-        //std::cout << "this->success = " << this->success << std::endl;
-        /*if (!this->success) {
-            return false;
-        }*/
-
-        // TEST REMOVE
-        //std::cout << "End of while loop BEFORE COUNTER++ AND DELETE SINGLE. continue_exec is: " << continue_exec << "\n" << std::endl;
-
-        // Is this how we avoid memory leaks?
-        //delete single;
-
-
-        // TEST REMOVE
-        //std::cout << "END OF WHILE LOOP. continue_exec: " << continue_exec << "\n" << std::endl;
     }
-
-    // TEST 
 
     return continue_exec;
 }

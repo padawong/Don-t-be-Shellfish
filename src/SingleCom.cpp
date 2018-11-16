@@ -73,7 +73,7 @@ bool SingleCom::execute() {
     //std::cout << "success = " << success << std::endl;
     
 
-//    return success;
+    return success;
     //  return true;
 }
 
