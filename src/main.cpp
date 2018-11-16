@@ -53,7 +53,8 @@ int main () {
         // TEST REMOVE
         ++count;
         */
-
+        
+        delete newCommand;
     } while(exit_loop == false);
     // ALTERNATE REALITY BLACKMAGIC CODE DEMO
     // && std::cout << "CHECKING WHILE"<< std::endl);  // Determine when to exit 

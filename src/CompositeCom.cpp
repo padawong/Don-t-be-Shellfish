@@ -156,6 +156,9 @@ bool CompositeCom::execute(/*Commands* cmdptr*/) {
                 skip_conn = true;
             }
         }
+        
+        // avoid memory leaks!
+        delete single;
     }
 
     return continue_exec;
