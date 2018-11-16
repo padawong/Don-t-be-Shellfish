@@ -118,7 +118,8 @@ bool CompositeCom::execute(/*Commands* cmdptr*/) {
 
     // Flag detects connectors and skips the first element of the string vector if true
     bool skip_conn = false;
-
+    
+    int count;
     for (int i = 0; i < commands_vector.size(); i++) {
 
         // TEST REMOVE
@@ -129,7 +130,15 @@ bool CompositeCom::execute(/*Commands* cmdptr*/) {
         // THAT WAY IF FALSE, CAN JUST END, BUT THERE WOULD STILL BE SOME TRICKY, INELEGANT STUFF WITH THAT TOO
         if (skip_conn) {
             commands_vector.at(i).erase(commands_vector.at(i).begin());
+            skip_conn = false;
         }
+
+        // TEST REMOVE
+    for (int u = 0; u < commands_vector.size(); u++) {
+        for (int j = 0; j < commands_vector.at(u).size(); j++) {
+            std::cout << commands_vector.at(u).at(j);
+        }
+    } std::cout << "\n\n" << std::endl;
 
         // Constructs new single command instance, passing in the current command in the form of a vector of strings
         SingleCom* single = new SingleCom(commands_vector.at(i));
@@ -151,30 +160,25 @@ bool CompositeCom::execute(/*Commands* cmdptr*/) {
         // If the current command returned false and the next command begins with &&, stop executing
         if (i + 1 < commands_vector.size() && commands_vector.at(i + 1).at(0) == "&&") {
             if (!exec_success) {
-                this->success = false;
-                return false;
-                /*
                 // TEST REMOVE
                 std::cout << "&& case found, !exec_success. setting false and breaking" <<  std::endl;
 
 
                 continue_exec = false;
 
+
                 // TEST REMOVE
-                //std::cout << "still within && case; continue_exec = " << continue_exec << std::endl;
-                //std::cout << "Returning false now.\n" << std::endl;
-
-
-                break;
+                std::cout << "still within && case; continue_exec = " << continue_exec << std::endl;
+                std::cout << "Returning false now.\n" << std::endl;
+                this->success = false;
                 return false;
-                */
             }
             else {
                 skip_conn = true;
             }
 
             // TEST REMOVE
-            //std::cout << "end of if; continue_exec = " << continue_exec << std::endl;
+            std::cout << "end of if; continue_exec = " << continue_exec << std::endl;
 
 
             /* 
