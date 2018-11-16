@@ -6,18 +6,20 @@
 
 
 int main () {
-    // need to implement 3 componenets
-    // 1) Initialize shell with $
-    // 2) Interpret and execute commands
-    // 3) How/when to terminate
-   
+  
     bool exit_loop = true;
     std::string cmd; 
 
+    // ALTERNATE REALITY BLACKMAGIC CODE DEMO
+    // TEST REMOVE
+    // int count = 0;
 
     // Start a main command loop    
     do{
-        
+        // ALTERNATE REALITY BLACKMAGIC CODE DEMO
+        // TEST REMOVE
+        //std::cout << "Start of do loop. count = " << count << std::endl;
+
         //store host name and username 
         char hostname[HOST_NAME_MAX];
         char username[LOGIN_NAME_MAX];
@@ -41,7 +43,20 @@ int main () {
         newCommand->execute();
         exit_loop = newCommand->exit;
         
-    } while(!exit_loop);  // Determine when to exit 
+        /*
+        // ALTERNATE REALITY BLACKMAGIC CODE DEMO
+        // TEST REMOVE
+        std::cout << "back in main. exit_loop = " << exit_loop << std::endl;
+        std::cout << "count = " << count << std::endl;
+       
+        // ALTERNATE REALITY BLACKMAGIC CODE DEMO
+        // TEST REMOVE
+        ++count;
+        */
+
+    } while(exit_loop == false);
+    // ALTERNATE REALITY BLACKMAGIC CODE DEMO
+    // && std::cout << "CHECKING WHILE"<< std::endl);  // Determine when to exit 
 
   
     return 0;
