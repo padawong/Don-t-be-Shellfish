@@ -12,6 +12,8 @@ ADD_EXECUTABLE(rshell
 
 ADD_EXECUTABLE(test
 	./tests/test.cpp
+    ./src/CompositeCom.cpp
+    ./src/SingleCom.cpp
 )
 
 TARGET_LINK_LIBRARIES(test gtest)
