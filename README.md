@@ -1,51 +1,40 @@
+﻿# Assignment 2: README
+***Summary:*** 
+    So far, we have completed all the requirements for assignment 2. Implementing the Composite pattern, we:
 
-MUST USE MARKDOWN FORMATTING LANGUAGE FOR THIS FILE; NOT YET IMPLEMENTED
-
-
-
-CS100, FALL 2018
-ERIN WONG
-NIVEDHA KARTHIKEYAN
-
-Assignment 2
-
-LIST OF KNOWN BUGS:
-- 
+ 1. Initialized the shell (with the extra credit requirements done as well)
+ 2. Interpreted and executed the commands that are inputted 
+ 3. Parsed commands and decided how/when to terminate 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+## main.cpp
+ Our **main.cpp** prompts user to enter a string of commands, which is received and stored via **getline()**, and is used to create a new object of type **CompositeCom**. CompositeCom has a **parse()** function that is used to chop up and execute individual commands within the line of commands we received from the user. This is all encompassed within a do-while loop, taking in commands until the user enters an exit, which is caught in **parse()** and sets our do-while loop's condition to false to break. 
+    
 
-# Assignment 1 -- Creating a Design Document
+## CompositeCom
 
-**Note: All assignments must be done with *exactly* one partner.**
+ Once we have passed the user inputted command into Composite command, we user delimiters to create a vector of vectors comprised only of the commands and the connectors. At each vector within the larger vector, the first element is the connector.  
+ - parse()
+	 - Any number of commands are divided up with a delimiter 
+ - execute()
+	 - Passes each individual command to SingleCom
 
-## Introduction
-As programmers it is tempting for us to get our hands dirty with code immediately after receiving the specs. In any complex software development, there are many moving parts and pieces that can quickly turn out project into spaghetti code. It is imperative that before we open vim we take a step back, plan out the code we are going to write, and create a design to follow. One tool software engineers use for this is Unified Modeling Language (UML) which help visualize our project’s architecture. In this assignment you will create a design document to map out your first coding assignment, Assignment 2. This will include a simple UML diagram to represent your components and their dependencies. You can [read more about creating UML diagrams from this slide deck](https://docs.google.com/presentation/d/12gFQDxn4T0sXfXiuGIiW5OlUfgKW85e86UbnR59gMdc/edit?usp=sharing).
 
-## Assignment
-Your assignment is to write a design document that you will use for reference when developing your Assignment 2 submission. It’s purpose is as an exercise to get you to start designing before you start coding. Like any good agile method, what you write in the design document is a starting point for your design, not a road map that you must rigidly follow (because that would be waterfall development, and this is not a government project). You should create a document with the following sections
+## SingleCom
 
-- **Title Page:** including the title “Assignment 1: Design”, the date, the quarter and year, and the authors names
-- **Introduction:** Give a brief overview of your design
-- **Diagram:** This will be the UML diagram for your system, and should show all classes you plan on developing. This diagram can take up multiple pages if necessary.
-- **Classes/Class Groups:** descriptions of each class/class group that you plan on developing, this can be as simple as a description of what each class accomplishes and how, or a pseudo code level class definition. A class group would be a group of classes that all inherit from a single base class (composite classes are an example). For class group give a description of the base class, as well as the subtle differences between the child classes. Make sure to describe any key design choices, such as why you chose certain containers for key data members, why a class needs to pointer member to another class, or how a key function will generally be written
-- **Coding Strategy:** how you and your partner plan to break up the work, who will be in charge of which segments and how you will integrate the segments together
-- **Roadblocks:** issues that you think will arise during development and what strategy you will use to overcome them
+The SingleCom class actually executes each one of the commands that it receives in CompositeCom, utilizing **execvp** to handle all the commands. We fork to handle parent and child commands, so that the parent waits to execute after the child. 
 
-When you create your design document, do not think only about the current assignment. Think about how you would also extend the assignment to have new functionality (an important exercise in software construction, as new functionality is almost always necessary).
+Returns true in the event of each user command being executed properly, else false if either or the parent of the child does not. We use **pid** in order to wait for any subprocesses to finish before executing the ones at hand. 
 
-Please  use some drawing program to create your UML diagram. UML diagrams that are drawn by hand and scanned/photographed and added to your design document will not be allowed. Programs such as GIMP, GraphViz, or even Google Docs should be capable of creating these diagrams.
 
-## Submission
-Submit your design document as a single PDF to your groups GitHub repo.
+## Bugs? 
+We came across one bug in the exec, within the while loop. We initially used a true false flag as part of the while loop condition to break on a false. Somewhere between, out flag kept getting changed, and we couldn't figure out why this was happening, even if we tried debugging using **cout** flags to pinpoint where in the code the switch was occurring. We decided to change up our approach. 
 
-## Grading
-Your documents will be graded using the following breakdown
+List of bugs we came across:
+- Why exit had to be entered N times in order for it to actually exit
+- Ending a command regardless of length with a semicolon throws an error. 
+- Weren't sure exactly how to test our program. We wanted to check that each command line input was being run correctly, but couldn't figure out a proper way to implement that using google test. So, instead we decided to check that the vectors in CompositeCom were holding the correct command at each location. 
 
-|Points|Section|
-|:---:|:---|
-| 40 | UML Diagram |
-| 30 | Class Descriptions |
-| 20 | All Other Sections |
-| 10 | Structure |
-|**100** | **Total** |
+
+
+
