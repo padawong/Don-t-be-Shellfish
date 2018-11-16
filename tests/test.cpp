@@ -10,15 +10,20 @@
 //
 //
 TEST(EchoTest, SingleCommands){
-    //EXPECT_EQ(, );
-    
+    // ls -a
+    // mkdir TEST_DIR
+    // ls -b
+    // rm -r TEST_DIR
+    // ls
 
+    //EXPECT_EQ(, );
 }
 
 
 TEST(EchoTest, ConnectorCommands_1){
-    //EXPECT_EQ();
 
+
+    //EXPECT_EQ();
 }    
 
 TEST(EchoTest, ConnectorCommands_2){
