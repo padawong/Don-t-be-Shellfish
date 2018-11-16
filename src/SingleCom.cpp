@@ -61,7 +61,7 @@ bool SingleCom::execute() {
     if (pid > 0) {
         // since child pid = 0, we are waiting for child = 0
        if (waitpid(0, NULL, 0) == -1) {
-            success = false;
+            //success = false;
             perror("Parent wait failed");
             //return false;
         }
