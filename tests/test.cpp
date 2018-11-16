@@ -16,19 +16,42 @@ TEST(EchoTest, SingleCommands){
 }
 
 
-TEST(EchoTest, ConnectorCommands){
+TEST(EchoTest, ConnectorCommands_1){
+    //EXPECT_EQ();
+
+}    
+
+TEST(EchoTest, ConnectorCommands_2){
+    //EXPECT_EQ();
+
+}    
+
+TEST(EchoTest, ConnectorCommands_3){
     //EXPECT_EQ();
 
 }    
 
 
-TEST(EchoTest, CommentCommands){
+TEST(EchoTest, CommentCommand_1){
     //EXPECT_EQ();
 
 }
 
 
-TEST(EchoTest, ExitCommands){
+TEST(EchoTest, CommentCommands_2){
+    //EXPECT_EQ();
+
+}
+
+
+TEST(EchoTest, ExitCommands_1){
+    //EXPECT_EQ();
+
+}
+
+
+
+TEST(EchoTest, ExitCommands_2){
     //EXPECT_EQ();
 
 }
