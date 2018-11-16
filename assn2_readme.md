@@ -32,6 +32,8 @@ We came across one bug in the exec, within the while loop. We initially used a t
 
 List of bugs we came across:
 - Why exit had to be entered N times in order for it to actually exit
+- Ending a command regardless of length with a semicolon throws an error. 
+
 
 
 
