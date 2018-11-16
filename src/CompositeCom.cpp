@@ -82,7 +82,7 @@ bool CompositeCom::execute(/*Commands* cmdptr*/) {
     bool skip_conn = false;
     
     int count;
-    for (int i = 0; i < commands_vector.size(); i++) {
+    for (int i = 0; i < commands_vector.size(); i++) { 
         // If skip_conn flag is true, remove the first element from the string vector which is a connector
         // IDEALLY THIS LOGIC WOULD BE FIXED SO THAT THE CONNECTORS WERE THE LAST ELEMENT OF AN ARRAY MAYBE
         // THAT WAY IF FALSE, CAN JUST END, BUT THERE WOULD STILL BE SOME TRICKY, INELEGANT STUFF WITH THAT TOO
@@ -109,6 +109,9 @@ bool CompositeCom::execute(/*Commands* cmdptr*/) {
         // If single runs "exit", exit.
         if (single->exit) {
             this->exit = true;
+
+            // TEST REMOVE
+            //std::cout << "exit was detected. exit = " << exit << std::endl;
             return false;
         }
 
