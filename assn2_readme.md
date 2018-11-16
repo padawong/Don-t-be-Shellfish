@@ -33,6 +33,7 @@ We came across one bug in the exec, within the while loop. We initially used a t
 List of bugs we came across:
 - Why exit had to be entered N times in order for it to actually exit
 - Ending a command regardless of length with a semicolon throws an error. 
+- Weren't sure exactly how to test our program. We wanted to check that each command line input was being run correctly, but couldn't figure out a proper way to implement that using google test. So, instead we decided to check that the vectors in CompositeCom were holding the correct command at each location. 
 
 
 
