@@ -52,6 +52,7 @@ bool SingleCom::execute() {
 
             perror("Invalid command");
             
+            return success;
             //return false;
         }
     }
@@ -59,11 +60,12 @@ bool SingleCom::execute() {
     // Parent function waits for child to be murdered before resuming life
     if (pid > 0) {
         // since child pid = 0, we are waiting for child = 0
-        if (wait(0) == -1) {
+       if (waitpid(0, NULL, 0) == -1) {
             success = false;
             perror("Parent wait failed");
             //return false;
         }
+
     }
 
     // TEST REMOVE
@@ -71,6 +73,7 @@ bool SingleCom::execute() {
     //std::cout << "success = " << success << std::endl;
     
 
-    return success;
+//    return success;
+    //  return true;
 }
 
