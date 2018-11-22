@@ -35,9 +35,7 @@ We came across one bug in the exec, within the while loop. We initially used a t
 
 List of bugs we came across:
 - Why exit had to be entered N times in order for it to actually exit
-- Ending a command regardless of length with a semicolon throws an error. 
-- Weren't sure exactly how to test our program. We wanted to check that each command line input was being run correctly, but couldn't figure out a proper way to implement that using google test. So, instead we decided to check that the vectors in CompositeCom were holding the correct command at each location. 
-
-
-
-
+  + In fact, if we input "garbage_input && echo hi", the second command will not happen (as expected) UNTIL "exit" is called once, then "echo hi" occurs. Exit successful on second "exit" call.
+- Ending a command with a semicolon throws an error regardless of command length.
+- Empty command NEWLINE results in failure 
+- (Not exactly a bug) Couldn't figure out how to test/verify the execution of commands, so instead we just test the parsing function and the bool return of a valid command
