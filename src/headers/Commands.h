@@ -15,6 +15,8 @@ class Commands {
         
         //virtual bool parse() = 0;
         virtual bool execute(/*Commands* cmdptr*/) = 0;
+
+        Commands* first_cmd;
 };
 
 #endif // COMMANDS_H
