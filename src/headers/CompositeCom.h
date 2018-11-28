@@ -7,8 +7,8 @@
 
 class CompositeCom : public Commands {
     protected:
-        Commands* left;
-        Commands* right;
+        //Commands* left;
+        //Commands* right;
 
     public:
         CompositeCom(); 
@@ -16,7 +16,7 @@ class CompositeCom : public Commands {
         // CompositeCom(std::string command_in, Commands* l, Commands* r) : Commands(command_in), left(l), right(r) {}
         
         void parse();
-        bool execute();
+        virtual bool execute() = 0;
 
         std::vector< std::vector<std::string> > commands_vector;
 };
