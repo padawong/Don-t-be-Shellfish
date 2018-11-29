@@ -1,25 +1,22 @@
-#include "or_op.h"
+#include "headers/or_op.h"
 
 Or_Op::Or_Op() {}
 
-Or_Op::Or_Op(Commands* l, Commands* r) : BinaryComp(l, r) {}
-
 bool Or_Op::execute() {
 
-    bool left_success = left->execute();
-    this->exit = left->exit;
-
     // Check for exit flag; if found, return true to exit
-    if (this->exit) {
+    if (this->prev->exit) {
+        this->exit = true;
         return true;
     }
 
-    // If left returned false, run right;
+    // If previous operation returned false, run right;
     //  This entire root returns whatever value right returns
-    if (!left_succcess) {
+    if (!this->prev->success) {
         return right->execute();
     }
 
+    // Based on testing in terminal:
     // If left returned true, return true and do not run right
     else {
         return true;
