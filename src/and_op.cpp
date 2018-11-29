@@ -16,7 +16,7 @@ bool And_Op::execute() {
       
     // If previous operation returned true, run right;
     //  This entire root returns whatever value right returns 
-    if (this->prev->success) {
+    if (this->prev->right->success) {
         this->success = this->right->execute();
     }
     // If right execution is not run at all, success of entire root is false

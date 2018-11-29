@@ -276,6 +276,8 @@ bool CompositeCom::execute() {
 
 
     this->success = this->first_cmd->right->execute();
+    // TEST REMOVE
+    std::cout << "this->success = " << this->success << std::endl;
 
     if (first_cmd->next == NULL) {
         return this->success;
