@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 #include "../src/headers/CompositeCom.h"
-
+/*
 
 //char** ARGV_IN;
 
@@ -113,6 +113,7 @@ TEST(EchoTest, valid_command) {
     EXPECT_EQ(true, success);
 }
 
+*/
 int main(int argc, char **argv) {
 //  ARGV_IN = argv;
     
