@@ -16,30 +16,30 @@ CompositeCom::CompositeCom(std::string command_in) : Commands(command_in) {}
 bool CompositeCom::parse(std::vector<std::string>& vstring) {
 
     // TEST REMOVE
-    std::cout << "O WE PARSING NOW" << std::endl;
+    /*std::cout << "O WE PARSING NOW" << std::endl;
     for (int i = 0; i < commands_vect.size(); i++)
         for (int j = 0; j < commands_vect.at(i).size(); j++)
             std::cout << commands_vect.at(i).at(j);
     std::cout << std::endl;
-
+*/
 
     CompositeCom* current_com = new CompositeCom;
 
     //TEST REMOVE
     //std::cout << "Assigned current_com to first_cmd" << std::endl;
-    std::cout << "vstring.size() = " << vstring.size() << std::endl;
+ /*   std::cout << "vstring.size() = " << vstring.size() << std::endl;
     int test_count = 0;
-
+*/
 
     std::vector<std::string> vstring_chunks;
     
     //TEST REMOVE
-    std::cout << "vstring_chunks just made. size = " << vstring_chunks.size() << std::endl;
+ //   std::cout << "vstring_chunks just made. size = " << vstring_chunks.size() << std::endl;
 
 
     while(vstring.size() > 0) {
         // TEST REMOVE
-        std::cout << "while loop number: " << test_count << std::endl;
+        //std::cout << "while loop number: " << test_count << std::endl;
 
 
         std::string temp = vstring.at(0);
@@ -88,12 +88,12 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
             current_com = or_com;
  
             //TEST REMOVE
-            std::cout << "|| case reached" << std::endl;
+            //std::cout << "|| case reached" << std::endl;
         }
         
         else if (temp.at(temp.size() - 1) == ';') {
             // TEST REMOVE
-            std::cout << "; case reached" << std::endl;
+           // std::cout << "; case reached" << std::endl;
 
 
             // Remove the semicolon from the string
@@ -116,7 +116,7 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
  
             if (first_cmd == NULL) {
                  // TEST REMOVE
-                std::cout << "in || case, first_cmd == null" << std::endl;
+               // std::cout << "in || case, first_cmd == null" << std::endl;
                 this->first_cmd = current_com;
             }
             current_com = semi_com;
@@ -124,7 +124,7 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
        
         else if (temp.at(0) == '(') {
             // TEST REMOVE
-            std::cout << "( case reached" << std::endl;
+           // std::cout << "( case reached" << std::endl;
 
 
 
@@ -193,15 +193,15 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
         else {
 
             //TEST REMOVE
-            std::cout << "else case reached" << std::endl;
+            //std::cout << "else case reached" << std::endl;
 
             vstring_chunks.push_back(temp);
             vstring.erase(vstring.begin());
 
             //TEST REMOVE
-            std::cout << "vstring_chunks.at(0) = " << vstring_chunks.at(0) << std::endl;
+            //std::cout << "vstring_chunks.at(0) = " << vstring_chunks.at(0) << std::endl;
             // TEST REMOVE
-            std::cout << "vstring_chunks.size() == " << vstring_chunks.size() << std::endl;
+            //std::cout << "vstring_chunks.size() == " << vstring_chunks.size() << std::endl;
 
            
             
@@ -210,13 +210,14 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
         }
 
        //TEST REMOVE
-        test_count++;
+       /* test_count++;
         std::cout << "END OF WHILE LOOP REACHED." << std::endl;
         if (test_count > 15)
             break;
+            */
     }
         // TEST REMOVE
-        std::cout << "vstring_chunks.size() == " << vstring_chunks.size() << std::endl;
+        //std::cout << "vstring_chunks.size() == " << vstring_chunks.size() << std::endl;
 
 
     if (vstring_chunks.size() > 0) {
@@ -225,7 +226,7 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
         current_com->right = single;
                  
         //TEST REMOVE
-        std::cout << "single->commands_vect.at(0) = " << single->commands_vect.at(0) << std::endl;
+        //std::cout << "single->commands_vect.at(0) = " << single->commands_vect.at(0) << std::endl;
         
         
         if (this->first_cmd == NULL) {
@@ -233,9 +234,10 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
             this->first_cmd->next = NULL;
             
             //TEST REMOVE
-            std::cout << "first_cmd == null but now assigned" << std::endl;
+/*            std::cout << "first_cmd == null but now assigned" << std::endl;
             
             std::cout << "now first_cmd->commands_vect.at(0) = " << this->first_cmd->right->commands_vect.at(0) << std::endl;
+            */
         }
  
        
@@ -257,13 +259,13 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
 
 bool CompositeCom::execute() {
     // TEST REMOVE
-    std::cout << "within CompCom::execute" << std::endl;
+    /*std::cout << "within CompCom::execute" << std::endl;
     if (this->first_cmd == NULL) {
         std::cout << "first_cmd = null" << std::endl;
     }
     else {
         std::cout << "first_cmd != null" << std::endl;
-    }
+    }*/
 
 //    std::cout << "this->first_cmd->success = ";
 //    std::cout << this->first_cmd->success << std::endl;
@@ -277,7 +279,7 @@ bool CompositeCom::execute() {
 
     this->success = this->first_cmd->right->execute();
     // TEST REMOVE
-    std::cout << "this->success = " << this->success << std::endl;
+    //std::cout << "this->success = " << this->success << std::endl;
 
     if (first_cmd->next == NULL) {
         return this->success;

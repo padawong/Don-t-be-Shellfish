@@ -41,18 +41,18 @@ int main () {
         CompositeCom* newCommand = new CompositeCom(cmd);
 
         //TEST REMOVE
-        std::cout << "newCommand not yet tokenized, but created" << std::endl;
+        //std::cout << "newCommand not yet tokenized, but created" << std::endl;
 
 
         newCommand->tokenize();
 
         // TEST REMOVE
-        std::cout << "tokenize complete" << std::endl;
+        //std::cout << "tokenize complete" << std::endl;
 
         newCommand->parse(newCommand->commands_vect);
  
         // TEST REMOVE
-        std::cout << "parse complete" << std::endl;
+        //std::cout << "parse complete" << std::endl;
 
         newCommand->execute();
         exit_loop = newCommand->exit;

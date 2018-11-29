@@ -34,6 +34,9 @@ bool SingleCom::execute() {
         if (execvp(args[0], args) == -1) {
             success = false;
 
+            // TEST REMOVE
+            std::cout << "Within single child. success = " << success << std::endl;
+
             perror("Invalid command");
             
             return success;
