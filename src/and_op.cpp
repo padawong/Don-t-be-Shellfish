@@ -11,12 +11,15 @@ bool And_Op::execute() {
     }
 
          // TEST REMOVE
-        std::cout << "within and-execute; nothing done yet" << std::endl;
+        //std::cout << "within and-execute; nothing done yet" << std::endl;
         //std::cout << "this->right->commands_vect.at(0) = " << this->right-> 
+    //std::cout << "this->prev->success = " << this->prev->success << std::endl;
+    //std::cout << "this->prev->right->commands_vect.at(0) = " << this->prev->right->commands_vect.at(0) << std::endl; 
+
       
     // If previous operation returned true, run right;
     //  This entire root returns whatever value right returns 
-    if (this->prev->right->success) {
+    if (this->prev->success) {
         this->success = this->right->execute();
     }
     // If right execution is not run at all, success of entire root is false
