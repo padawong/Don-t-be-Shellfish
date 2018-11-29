@@ -14,7 +14,7 @@ class CompositeCom : public Commands {
         void parse();
         virtual bool execute() = 0;
 
-        std::vector< std::vector<std::string> > commands_vector;
+        //std::vector< std::vector<std::string> > commands_vector;
 };
 
 #endif // COMPOSITECOM_H

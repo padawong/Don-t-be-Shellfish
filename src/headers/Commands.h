@@ -17,6 +17,8 @@ class Commands {
         virtual bool execute(/*Commands* cmdptr*/) = 0;
 
         Commands* first_cmd;
+        std::vector <std::string> commands_vect;
+
 };
 
 #endif // COMMANDS_H
