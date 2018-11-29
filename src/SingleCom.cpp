@@ -1,7 +1,7 @@
 #include "./headers/SingleCom.h"
 
 SingleCom::SingleCom() {}
-SingleCom::SingleCom(std::vector < std::string >& cmd_v) : Commands(), commands_vect(cmd_v) {}
+//SingleCom::SingleCom(std::vector < std::string >& cmd_v) : Commands() , commands_vect(cmd_v) {}
 
 /*
 bool SingleCom::parse() {

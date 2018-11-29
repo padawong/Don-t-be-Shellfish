@@ -40,9 +40,15 @@ void CompositeCom::parse() {
         if (temp.at(0) == '&' || temp.at(0) == '|') {
             commands_vector.push_back(vstring);
 
+            if (temp.at(0) == '&') {
+                And_Op* and_
+            }
+            /*
+             *
             // The FIRST element in the NEXT vector will be the connector 
             vstring.clear();
             vstring.push_back(temp);
+            */
         }
 
         // If a string ends with a semicolon, append the word to the current vector, but begin the next vector
