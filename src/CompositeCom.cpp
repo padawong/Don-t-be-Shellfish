@@ -32,6 +32,11 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
 
 
     std::vector<std::string> vstring_chunks;
+    
+    //TEST REMOVE
+    std::cout << "vstring_chunks just made. size = " << vstring_chunks.size() << std::endl;
+
+
     while(vstring.size() > 0) {
         // TEST REMOVE
         std::cout << "while loop number: " << test_count << std::endl;
@@ -41,43 +46,27 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
 
         // If binary connector found, store the current vector of strings as a command
         if (temp.size() == 2 && temp.at(0) == '&' && temp.at(1) == '&') {
-            
-            // If vstring_chunks is not empty, then there is a vector string of commands that must be made into a command object
-            // if vstring_chunks is empty, then there is (likely) a preceding command which already has a right and only assignment of and_com->prev must occur
-            // This should only happen when current_com->right is null 
-            if (vstring_chunks.size() > 0) {
-                SingleCom* single = new SingleCom(vstring_chunks);
-               
-                current_com->right = single;
-                this->first_cmd = current_com;
+        
+            // Create single command using the strings accumulated thus far
+            SingleCom* single = new SingleCom(vstring_chunks);
+            current_com->right = single;
+            vstring_chunks.clear();
 
-                //TEST REMOVE
-                std::cout << "First command. this->first_cmd->right->commands_vect.at(0) = ";
-                std::cout << this->first_cmd->right->commands_vect.at(0) << std::endl;
-            
-                vstring_chunks.clear();
+            // If this is the first command, assign the first_cmd object
+            if (first_cmd == NULL) {
+                this->first_cmd = current_com;
             }
 
+            // Create an and_command object to point to the current command as prev
+            // Then set it to be the current command
             And_Op* and_com = new And_Op;
             and_com->prev = current_com;
 
             current_com->next = and_com;
-
-            /*
-            if (first_cmd == NULL) {
-                // TEST REMOVE
-                std::cout << "in && case, first_cmd == null" << std::endl;
-                this->first_cmd = current_com;
-            }
-            */
-
             current_com = and_com;
-            // and we test and_com->prev->success for true or false
 
+            // Remove the && from the vector of strings
             vstring.erase(vstring.begin());
-
-            //TEST REMOVE
-            std::cout << "&& case reached" << std::endl;
         }  
        
         else if (temp.size() == 2 && temp.at(0) == '|' && temp.at(1) == '|') {
@@ -223,7 +212,7 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
        //TEST REMOVE
         test_count++;
         std::cout << "END OF WHILE LOOP REACHED." << std::endl;
-        if (test_count > 5)
+        if (test_count > 15)
             break;
     }
         // TEST REMOVE
@@ -260,14 +249,8 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
             current_com->right = single;
         }*/
     }
-    /*
-    else {
-        // TEST REMOVE
-        std::cout << "in parse's final else case" << std::endl;
-        current_com->right = NULL;
-    }*/
-    // TEST REMOVE
-    std::cout << "returning from parse" << std::endl;
+
+    current_com->next = NULL;
 
     return true;
 }

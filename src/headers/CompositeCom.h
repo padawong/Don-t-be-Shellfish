@@ -13,6 +13,7 @@ class CompositeCom : public Commands {
         bool execute();
 
 
+        CompositeCom* next = NULL;
 
         CompositeCom* first_cmd = NULL;
         //std::vector< std::vector<std::string> > commands_vector;

@@ -13,7 +13,6 @@ class Commands {
         Commands(std::vector<std::string> string_vec_in);
 
         Commands* prev = NULL;
-        Commands* next = NULL;
         Commands* right = NULL;
 
         bool success = true;
