@@ -8,12 +8,18 @@ ADD_EXECUTABLE(rshell
 	./src/main.cpp
     ./src/CompositeCom.cpp
     ./src/SingleCom.cpp
+    ./src/and_op.cpp
+    ./src/or_op.cpp
+    ./src/semi_op.cpp
 )
 
 ADD_EXECUTABLE(test
 	./tests/test.cpp
     ./src/CompositeCom.cpp
     ./src/SingleCom.cpp
+    ./src/and_op.cpp
+    ./src/or_op.cpp
+    ./src/semi_op.cpp
 )
 
 TARGET_LINK_LIBRARIES(test gtest)
