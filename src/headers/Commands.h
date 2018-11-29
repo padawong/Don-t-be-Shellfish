@@ -2,21 +2,28 @@
 #define COMMANDS_H
 
 #include <string>
+#include <vector>
 
 class Commands {
     protected:
         std::string cmd;
     public:
-        Commands() {}
-        Commands(std::string command_in) : cmd(command_in) {}
-        
+        Commands();
+        Commands(std::string command_in);// : cmd(command_in) {}
+        Commands(std::vector<std::string> string_vec_in);
+
+        Commands* prev = NULL;
+        Commands* next = NULL;
+        Commands* right = NULL;
+
         bool success = true;
         bool exit = false;
-        
-        //virtual bool parse() = 0;
-        virtual bool execute(/*Commands* cmdptr*/) = 0;
+       
+        void tokenize();
+        //bool parse(std::vector<std::string>& str_vec);
+        virtual bool execute()= 0;
 
-        Commands* first_cmd;
+
         std::vector <std::string> commands_vect;
 
 };

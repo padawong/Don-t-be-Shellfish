@@ -8,12 +8,13 @@
 class CompositeCom : public Commands {
     public:
         CompositeCom(); 
-        CompositeCom(std::string command_in);
-        // CompositeCom(std::string command_in, Commands* l, Commands* r) : Commands(command_in), left(l), right(r) {}
-        
-        void parse();
-        virtual bool execute() = 0;
+        CompositeCom(std::string string_in);
+        bool parse(std::vector<std::string>& commands_in);
+        bool execute();
 
+
+
+        CompositeCom* first_cmd = NULL;
         //std::vector< std::vector<std::string> > commands_vector;
 };
 
