@@ -6,10 +6,6 @@
 #include <vector>
 
 class CompositeCom : public Commands {
-    protected:
-        //Commands* left;
-        //Commands* right;
-
     public:
         CompositeCom(); 
         CompositeCom(std::string command_in);

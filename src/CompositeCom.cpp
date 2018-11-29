@@ -4,7 +4,7 @@
 #include <vector>
 #include <cctype>
 
-CompositeCom::CompositeCom() {}
+CompositeCom::CompositeCom() : Commands() {}
 CompositeCom::CompositeCom(std::string command_in) : Commands(command_in) {}
 
 /* This gets tricky.
