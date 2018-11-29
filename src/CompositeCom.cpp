@@ -241,6 +241,7 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
         
         if (this->first_cmd == NULL) {
             this->first_cmd = current_com;
+            this->first_cmd->next = NULL;
             
             //TEST REMOVE
             std::cout << "first_cmd == null but now assigned" << std::endl;
@@ -293,7 +294,12 @@ bool CompositeCom::execute() {
 
     this->success = this->first_cmd->right->execute();
 
-    return this->first_cmd->next->execute();
+    if (first_cmd->next == NULL) {
+        return this->success;
+    }
+    else {
+        return this->first_cmd->next->execute();
+    }
 }
 /*
 // Calls execute on each vector of string
