@@ -11,5 +11,5 @@ class Paren : public CompositeCom {
         Commands* inner;
 
         bool execute();
-}
+};
 #endif // PAREN_H

@@ -6,9 +6,9 @@
 class And_Op : public BinaryComp {
     public:
         And_Op();
-        And_Op(Commands* l, Commands* r);
+        //And_Op(Commands* l, Commands* r);
 
         bool execute();
-}
+};
 
 #endif // AND_OP_H
