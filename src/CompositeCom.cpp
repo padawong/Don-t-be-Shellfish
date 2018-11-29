@@ -1,86 +1,304 @@
 #include "./headers/CompositeCom.h"
+#include "headers/and_op.h"
+#include "headers/or_op.h"
+#include "headers/semi_op.h"
+#include "headers/paren.h"
 #include <cstring>
 #include <iostream>
 #include <vector>
 #include <cctype>
 
+
+
 CompositeCom::CompositeCom() : Commands() {}
 CompositeCom::CompositeCom(std::string command_in) : Commands(command_in) {}
 
-/* This gets tricky.
- * We use a vector of string vectors. Each string vector contains one full command.
- * As we use strtok to generate these vectors, it is checking for connectors or the comment flag.
- * If the connectors are found, we pushback the vector string onto the vector of vectors.
- * If the comment flag is found, we break from the strtok process and proceed to executing the commands now in the vector of vectors.
- */
-void CompositeCom::parse() {
+bool CompositeCom::parse(std::vector<std::string>& vstring) {
 
-    // Create an array of char the size of our input command line
-    char str[cmd.size()];
-    strcpy(str, cmd.c_str());
+    // TEST REMOVE
+    std::cout << "O WE PARSING NOW" << std::endl;
+    for (int i = 0; i < commands_vect.size(); i++)
+        for (int j = 0; j < commands_vect.at(i).size(); j++)
+            std::cout << commands_vect.at(i).at(j);
+    std::cout << std::endl;
 
-    char* point;
 
-    std::vector<std::string> vstring;
+    CompositeCom* current_com = new CompositeCom;
 
-    //Delimiter is a space
-    point = strtok(str, " \n");
+    //TEST REMOVE
+    //std::cout << "Assigned current_com to first_cmd" << std::endl;
+    std::cout << "vstring.size() = " << vstring.size() << std::endl;
+    int test_count = 0;
 
-    //Main strtok loop 
-    while(point != NULL){
-        //Casting the char ptr to a string 
-        std::string temp(point);
 
-        // If comment flag is found, discontinue while loop to process commands stored in vector
-        if (temp.at(0) == '#') {
-            break;
-        }
+    std::vector<std::string> vstring_chunks;
+    while(vstring.size() > 0) {
+        // TEST REMOVE
+        std::cout << "while loop number: " << test_count << std::endl;
 
-        // If connector found, append to vector of strings, then append that vector to the vector of vectors
-        if (temp.at(0) == '&' || temp.at(0) == '|') {
-            commands_vector.push_back(vstring);
 
-            if (temp.at(0) == '&') {
-                And_Op* and_
+        std::string temp = vstring.at(0);
+
+        // If binary connector found, store the current vector of strings as a command
+        if (temp.size() == 2 && temp.at(0) == '&' && temp.at(1) == '&') {
+            
+            // If vstring_chunks is not empty, then there is a vector string of commands that must be made into a command object
+            // if vstring_chunks is empty, then there is (likely) a preceding command which already has a right and only assignment of and_com->prev must occur
+            // This should only happen when current_com->right is null 
+            if (vstring_chunks.size() > 0) {
+                SingleCom* single = new SingleCom(vstring_chunks);
+               
+                current_com->right = single;
+                this->first_cmd = current_com;
+
+                //TEST REMOVE
+                std::cout << "First command. this->first_cmd->right->commands_vect.at(0) = ";
+                std::cout << this->first_cmd->right->commands_vect.at(0) << std::endl;
+            
+                vstring_chunks.clear();
             }
-            /*
-             *
-            // The FIRST element in the NEXT vector will be the connector 
-            vstring.clear();
-            vstring.push_back(temp);
-            */
-        }
 
-        // If a string ends with a semicolon, append the word to the current vector, but begin the next vector
-        // ; is not saved at all because its presence is unnecessary
+            And_Op* and_com = new And_Op;
+            and_com->prev = current_com;
+
+            current_com->next = and_com;
+
+            /*
+            if (first_cmd == NULL) {
+                // TEST REMOVE
+                std::cout << "in && case, first_cmd == null" << std::endl;
+                this->first_cmd = current_com;
+            }
+            */
+
+            current_com = and_com;
+            // and we test and_com->prev->success for true or false
+
+            vstring.erase(vstring.begin());
+
+            //TEST REMOVE
+            std::cout << "&& case reached" << std::endl;
+        }  
+       
+        else if (temp.size() == 2 && temp.at(0) == '|' && temp.at(1) == '|') {
+            // Create a SingleCom instance to hold the vector of strings containing its command
+            if (vstring_chunks.size() > 0) {
+                SingleCom* single = new SingleCom(vstring_chunks);
+                current_com->right = single;
+
+                vstring_chunks.clear();
+            }
+ 
+            Or_Op* or_com = new Or_Op;
+            or_com->prev = current_com;
+ 
+            if (first_cmd == NULL) {
+                this->first_cmd = current_com;
+            }
+
+            current_com = or_com;
+ 
+            //TEST REMOVE
+            std::cout << "|| case reached" << std::endl;
+        }
+        
         else if (temp.at(temp.size() - 1) == ';') {
+            // TEST REMOVE
+            std::cout << "; case reached" << std::endl;
+
+
             // Remove the semicolon from the string
             temp.pop_back();
+           
+            // If there are characters before the semicolon, add them to the ongoing vector of strings 
+            if (temp.size() > 0) {
+                vstring_chunks.push_back(temp);
+            }
 
-            vstring.push_back(temp);
-            commands_vector.push_back(vstring);
+            if (vstring_chunks.size() > 0) {
+                SingleCom* single = new SingleCom(vstring_chunks);
+                current_com->right = single;
 
-            vstring.clear();
+                vstring_chunks.clear();
+            }
+
+            Semi_Op* semi_com = new Semi_Op;
+            semi_com->prev = current_com;
+ 
+            if (first_cmd == NULL) {
+                 // TEST REMOVE
+                std::cout << "in || case, first_cmd == null" << std::endl;
+                this->first_cmd = current_com;
+            }
+            current_com = semi_com;
+        }
+       
+        else if (temp.at(0) == '(') {
+            // TEST REMOVE
+            std::cout << "( case reached" << std::endl;
+
+
+
+            // If there are strings preceding (, then it is not to be treated as a command parentheses. 
+            // It is part of the string of a command 
+            //   (which will return an error because the parentheses will likely not be valid)
+            if (vstring_chunks.size() > 0) {
+                vstring_chunks.push_back(temp);
+            }
+
+            else {
+                // Remove the opening parenthese from the string
+                temp.erase(0, 0);
+
+                // Run through the strings to find the ending parentheses, then send that whole string into a recursive parse call
+                // If no ending parentheses found, return false;
+                for (int i = 0; i < vstring.size(); i++) {
+                    // String to hold parsed characters within current string
+                    std::string temp_s;
+
+                    for (int j = 0; j < vstring.at(i).size(); j++) {
+                        char current = vstring.at(i).at(j);
+
+                        if (current == ')') {
+                           // Remove the ')' from the string
+                           vstring.at(i).erase(0, j);
+
+                           // Add string thus far onto running vector
+                           vstring_chunks.push_back(temp_s);
+
+                           // Breaks the outer for loop as well
+                           i = vstring.size();
+                           break;
+                        }                   
+
+                        temp_s.push_back(current);
+                    }
+                    
+                    // Add analyzed string to the running vector
+                    vstring_chunks.push_back(temp_s);
+
+                    // Remove the parsed string from the general vector
+                    vstring.erase(vstring.begin());
+                }
+                
+                // If all strings checked and no closing parentheses found, return false
+                if (vstring.size() == 0) { // || !(vstring.size() == 1 && vstring.at(0).size() == 0) {
+                    return false;
+                }
+
+                // Recursive call to parse the command(s) within the parentheses
+                Paren* parenth = new Paren();
+                CompositeCom* temp_com = new CompositeCom();
+                // REMOVE make this assign by reference
+                temp_com->commands_vect = vstring_chunks;
+                temp_com->parse(vstring_chunks);
+                parenth->inner = temp_com;
+
+                // Set parentheses command to be the current one
+                current_com->right = parenth;
+                
+                vstring_chunks.clear();
+            }
         }
 
         else {
-            vstring.push_back(temp);
+
+            //TEST REMOVE
+            std::cout << "else case reached" << std::endl;
+
+            vstring_chunks.push_back(temp);
+            vstring.erase(vstring.begin());
+
+            //TEST REMOVE
+            std::cout << "vstring_chunks.at(0) = " << vstring_chunks.at(0) << std::endl;
+            // TEST REMOVE
+            std::cout << "vstring_chunks.size() == " << vstring_chunks.size() << std::endl;
+
+           
+            
+            
+            //vstring_chunks.clear();
         }
 
-        //Appending string to vector
-        //vstring.push_back(temp);
-
-        //Moving onto next command w/ strtok
-        point = strtok(NULL, " ");
+       //TEST REMOVE
+        test_count++;
+        std::cout << "END OF WHILE LOOP REACHED." << std::endl;
+        if (test_count > 5)
+            break;
     }
+        // TEST REMOVE
+        std::cout << "vstring_chunks.size() == " << vstring_chunks.size() << std::endl;
 
-    // Add final string vector to vector vector
-    commands_vector.push_back(vstring);
+
+    if (vstring_chunks.size() > 0) {
+        // Add final string vector to a SingleCom
+        SingleCom* single = new SingleCom(vstring_chunks);
+        current_com->right = single;
+                 
+        //TEST REMOVE
+        std::cout << "single->commands_vect.at(0) = " << single->commands_vect.at(0) << std::endl;
+        
+        
+        if (this->first_cmd == NULL) {
+            this->first_cmd = current_com;
+            
+            //TEST REMOVE
+            std::cout << "first_cmd == null but now assigned" << std::endl;
+            
+            std::cout << "now first_cmd->commands_vect.at(0) = " << this->first_cmd->right->commands_vect.at(0) << std::endl;
+        }
+ 
+       
+                
+       /* 
+        // If there are no other commands, save as first_cmd
+        if (current_com->prev == NULL) {
+            current_com = single;
+        }
+        else {
+            current_com->right = single;
+        }*/
+    }
+    /*
+    else {
+        // TEST REMOVE
+        std::cout << "in parse's final else case" << std::endl;
+        current_com->right = NULL;
+    }*/
+    // TEST REMOVE
+    std::cout << "returning from parse" << std::endl;
+
+    return true;
 }
 
+bool CompositeCom::execute() {
+    // TEST REMOVE
+    std::cout << "within CompCom::execute" << std::endl;
+    if (this->first_cmd == NULL) {
+        std::cout << "first_cmd = null" << std::endl;
+    }
+    else {
+        std::cout << "first_cmd != null" << std::endl;
+    }
+
+//    std::cout << "this->first_cmd->success = ";
+//    std::cout << this->first_cmd->success << std::endl;
+
+    std::cout << "this->first_cmd->right->commands_vect = ";
+    for (int i = 0; i < this->commands_vect.size(); i++)
+        for (int j = 0; j < this->commands_vect.at(i).size(); j++)
+            std::cout << this->commands_vect.at(i).at(j);
+    std::cout << std::endl;
+
+
+    this->success = this->first_cmd->right->execute();
+
+    return this->first_cmd->next->execute();
+}
+/*
 // Calls execute on each vector of string
 // Responds appropriately to the connectors based on the return values of SingleCom execute
-bool CompositeCom::execute(/*Commands* cmdptr*/) {
+bool CompositeCom::execute() {
 
     bool continue_exec = true;
 
@@ -96,15 +314,6 @@ bool CompositeCom::execute(/*Commands* cmdptr*/) {
             commands_vector.at(i).erase(commands_vector.at(i).begin());
             skip_conn = false;
         }
-
-        // TEST REMOVE
-        /*for (int u = 0; u < commands_vector.size(); u++) {
-            std::cout << "\n Vect vect #" << u << std::endl;
-            for (int j = 0; j < commands_vector.at(u).size(); j++) {
-                std::cout << commands_vector.at(u).at(j);
-            }
-        } std::cout << "\n\n" << std::endl;
-*/
 
 
         // Constructs new single command instance, passing in the current command in the form of a vector of strings
@@ -168,4 +377,4 @@ bool CompositeCom::execute(/*Commands* cmdptr*/) {
     }
 
     return continue_exec;
-}
+}*/
