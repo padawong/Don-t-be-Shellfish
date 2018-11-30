@@ -14,5 +14,13 @@ bool Semi_Op::execute() {
         return true;
     }
 
-    return right->execute();
+    this->success = this->right->execute();
+
+    // If there are more operations, continue running them
+    if (this->next != NULL) {
+        return this->next->execute();
+    }
+    else {
+        return this->success;
+    }
 }

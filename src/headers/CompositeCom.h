@@ -9,6 +9,8 @@ class CompositeCom : public Commands {
     public:
         CompositeCom(); 
         CompositeCom(std::string string_in);
+        CompositeCom(std::vector<std::string>& str_vec_in);
+
         bool parse(std::vector<std::string>& commands_in);
         bool execute();
 

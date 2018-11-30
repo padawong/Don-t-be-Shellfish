@@ -13,7 +13,7 @@
 class SingleCom : public Commands {
     public:
         SingleCom();
-        SingleCom(std::vector <std::string>& cmd_v);
+        SingleCom(std::vector<std::string>& cmd_v);
         
         //bool parse();
         bool execute();
