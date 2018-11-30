@@ -1,13 +1,17 @@
-﻿# Assignment 2: README
+﻿# Hw3
+ # Assignment 3: README
+ 
 
-## WE HAVEN'T BEEN ABLE TO FIGURE OUT HOW TO TAG OUR SUBMISSION AS hw2
+
 
 ***Summary:*** 
-    So far, we have completed all the requirements for assignment 2. Implementing the Composite pattern, we:
+    So far, we have completed all the requirements for assignment 3. Implementing the Composite pattern, we:
 
  1. Initialized the shell (with the extra credit requirements done as well)
  2. Interpreted and executed the commands that are inputted 
  3. Parsed commands and decided how/when to terminate 
+ 4. Added precedence operators
+ 5. Implemented testing for whether or not a given file path is valid. 
 
 
 ## main.cpp
@@ -29,6 +33,10 @@ The SingleCom class actually executes each one of the commands that it receives 
 
 Returns true in the event of each user command being executed properly, else false if either or the parent of the child does not. We use **pid** in order to wait for any subprocesses to finish before executing the ones at hand. 
 
+## TestCom
+
+The TestCom class simply utilizes stat and two of its macros to verify whether the passed in vector contains a valid file path or not. 
+
 
 ## Bugs? 
 We came across one bug in the exec, within the while loop. We initially used a true false flag as part of the while loop condition to break on a false. Somewhere between, out flag kept getting changed, and we couldn't figure out why this was happening, even if we tried debugging using **cout** flags to pinpoint where in the code the switch was occurring. We decided to change up our approach. 
@@ -39,3 +47,4 @@ List of bugs we came across:
 - Ending a command with a semicolon throws an error regardless of command length.
 - Empty command NEWLINE results in failure 
 - (Not exactly a bug) Couldn't figure out how to test/verify the execution of commands, so instead we just test the parsing function and the bool return of a valid command
+- Came across a lot of issues regarding the parenthesis, a lot of cases work, but some cases fail, which we found odd as they mirrored previous test cases which passed successfully 
