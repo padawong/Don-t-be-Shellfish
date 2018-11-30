@@ -29,8 +29,8 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
     //TEST REMOVE
     //std::cout << "Assigned current_com to first_cmd" << std::endl;
  /*   std::cout << "vstring.size() = " << vstring.size() << std::endl;
-    int test_count = 0;
 */
+    int test_count = 0;
 
     std::vector<std::string> vstring_chunks;
     
@@ -40,7 +40,11 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
 
     while(vstring.size() > 0) {
         // TEST REMOVE
-        //std::cout << "while loop number: " << test_count << std::endl;
+        std::cout << "while loop number: " << test_count << std::endl;
+
+
+        // TEST REMOVE
+        std::cout << "vstring.size() = " << vstring.size() << std::endl;
 
 
         std::string temp = vstring.at(0);
@@ -50,10 +54,21 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
        
             // If there is a parenth_cmd that has not been assigned, assign it here
             if (parenth_cmd != NULL) {
+                
+                // TEST REMOVE
+                std::cout << "parenth_cmd->inner->first_cmd->right->commands_vect.at(0) = " << parenth_cmd->inner->first_cmd->right->commands_vect.at(0) << std::endl;
+                vstring_chunks.clear();
+                // TEST REMOVE
+                std::cout << "current_com->right = parenth_cmd" << std::endl;
+                
                 current_com->right = parenth_cmd;
                 parenth_cmd = NULL;
             }
-
+            // TEST REMOVE
+/*            else if (parenth_cmd == NULL) {
+                std::cout << "parenth_cmd is null" << std::endl;
+            }
+*/
             // Otherwise create a single command to assign the vector of strings stored thus far
             else {
                 SingleCom* single = new SingleCom(vstring_chunks);
@@ -151,7 +166,7 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
        
         else if (temp.at(0) == '(') {
             // TEST REMOVE
-           // std::cout << "( case reached" << std::endl;
+           std::cout << "( case reached" << std::endl;
 
 
 
@@ -159,60 +174,129 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
             // It is part of the string of a command 
             //   (which will return an error because the parentheses will likely not be valid)
             if (vstring_chunks.size() > 0) {
+
+                // TEST REMOVE
+                std::cout << "vstring_chunks.size() > 0" << std::endl;
+               
+               
                 vstring_chunks.push_back(temp);
             }
 
             else {
+               
+               
+                // TEST REMOVE
+                std::cout << "vstring_chunks.size() !> 0" << std::endl;
+                
+                
+                // temp = vstring.at(0)
                 // Remove the opening parenthese from the string
-                temp.erase(0, 0);
+                temp.erase(temp.begin());
+
+                // TEST REMOVE
+                std::cout << "temp = " << temp << std::endl;
+
+                vstring.at(0).erase(vstring.at(0).begin());
+
+                // TEST REMOVE
+                std::cout << "vstring.at(0) = " << vstring.at(0) << std::endl;
+
+
+
+
 
                 // Run through the strings to find the ending parentheses, then send that whole string into a recursive parse call
                 // If no ending parentheses found, return false;
- 
-                while (vstring.size() > 0) {
+
+                bool inside_parens = true;
+                while (vstring.size() > 0 && inside_parens) {
                     std::string temp_s;
 
+                    // TEST REMOVE
+                    // std::cout << "within OUTER while loop: vstring.size() = " << vstring.size() << std::endl;
+                    
                     while (vstring.at(0).size() > 0) {
                         char current = vstring.at(0).at(0);
                         temp_s.push_back(current);
 
+                    // TEST REMOVE
+                    std::cout << "within INNER while loop: current = " << current << std::endl;
+
+
                         // Remove the char being analyzed from vstring
-                        vstring.at(0).erase(0, 0);
+                        vstring.at(0).erase(vstring.at(0).begin());
 
                         if (current == ')') {
-                            
+
+                            //
+                            // TEST REMOVE
+                            std::cout << "current = ) found" << std::endl;
                             // Add string thus far onto running vector
+                            temp_s.erase(temp_s.size() - 1);
                             vstring_chunks.push_back(temp_s);
 
                             // Potential bug: Support for ); not yet implemented
                             // If the character following the closing parenthese is not one of the following, the input is invalid, so end parse and return false
                             if (vstring.at(0).size() > 0) {
+
+                                // TEST REMOVE
+                                std::cout << ") found; vstring.at(0).size() = " << vstring.at(0).size() << std::endl;
+
+
                                 char next_c = vstring.at(0).at(0);
                                 if (next_c != '&' || next_c != '|' || next_c != ';' || next_c != ')') {
                                     return false;
                                 }
                             }
+                            // If this is the last element in the string, remove the string from vstring
+                            else { // (vstring.at(0).size() == 0)
+                                vstring.erase(vstring.begin());
+                            }
+                            
+
+                            // TEST REMOVE
+                            std::cout << "about to break" << std::endl;
+
+                            inside_parens = false;
 
                             break;
                         }
                     } 
-                    
-                    // Add analyzed string to the running vector
-                    vstring_chunks.push_back(temp_s);
+                   
+                    if (inside_parens == true) {
+                        // Add analyzed string to the running vector
+                        vstring_chunks.push_back(temp_s);
 
-                    // Remove the parsed string from the general vector
-                    vstring.erase(vstring.begin());
+                        // Remove the parsed string from the general vector
+                        vstring.erase(vstring.begin());
+                    }
                 }
                 
+                // TEST REMOVE
+                std::cout << "outside of parsing part of parens. gonna check vstring.size() now" << std::endl;
+                
                 // If all strings checked and no closing parentheses found, return false
-                if (vstring.size() == 0) { // || !(vstring.size() == 1 && vstring.at(0).size() == 0) {
+                if (inside_parens) {
                     return false;
+                }
+
+                // TEST REMOVE
+                std::cout << "Finished checking vstring.size()" << std::endl;
+
+                // TEST REMOVE
+                std::cout << "creating temp_com and tokenizing" << std::endl;
+                std::cout << "vstring_chunks: " <<std::endl;
+                for (int i = 0; i < vstring_chunks.size(); i++) {
+                    for (int j = 0; j < vstring_chunks.at(i).size(); j++) {
+                        std::cout << vstring_chunks.at(i).at(j);
+                    }
                 }
 
                 // Recursive call to parse the command(s) within the parentheses
                 CompositeCom* temp_com = new CompositeCom(vstring_chunks);
                 temp_com->tokenize();
                 // If parse of inner content fails, return false
+                
                 if (!temp_com->parse(temp_com->commands_vect)) {
                     return false;
                 }
@@ -222,6 +306,16 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
                 parenth->inner = temp_com;
                 parenth_cmd = parenth;
 
+                // TEST REMOVE
+                std::cout << "temp_com->first_cmd->right->commands_vect.at(0) = " << temp_com->first_cmd->right->commands_vect.at(0) << std::endl;
+                vstring_chunks.clear();
+                
+                // TEST REMOVE
+                std::cout << "parenth->inner->first_cmd->right->commands_vect.at(0) = " << parenth->inner->first_cmd->right->commands_vect.at(0) << std::endl;
+                vstring_chunks.clear();
+                //
+                // TEST REMOVE
+                std::cout << "parenth_cmd->inner->first_cmd->right->commands_vect.at(0) = " << parenth_cmd->inner->first_cmd->right->commands_vect.at(0) << std::endl;
                 vstring_chunks.clear();
             }
         }
@@ -246,14 +340,27 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
         }
 
        //TEST REMOVE
-       /* test_count++;
-        std::cout << "END OF WHILE LOOP REACHED." << std::endl;
+       test_count++;
+        /* std::cout << "END OF WHILE LOOP REACHED." << std::endl;
         if (test_count > 15)
             break;
             */
     }
         // TEST REMOVE
-        //std::cout << "vstring_chunks.size() == " << vstring_chunks.size() << std::endl;
+        std::cout << "WHILE LOOP ENDED; vstring_chunks.size() == " << vstring_chunks.size() << std::endl;
+
+        // If there is a parenth_cmd that has not been assigned, assign it here
+            if (parenth_cmd != NULL) {
+                
+                // TEST REMOVE
+                std::cout << "parenth_cmd->inner->first_cmd->right->commands_vect.at(0) = " << parenth_cmd->inner->first_cmd->right->commands_vect.at(0) << std::endl;
+                vstring_chunks.clear();
+                // TEST REMOVE
+                std::cout << "current_com->right = parenth_cmd" << std::endl;
+                
+                current_com->right = parenth_cmd;
+                parenth_cmd = NULL;
+            }
 
 
     if (vstring_chunks.size() > 0) {
