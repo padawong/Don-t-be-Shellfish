@@ -70,32 +70,32 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
         }  
        
         else if (temp.size() == 2 && temp.at(0) == '|' && temp.at(1) == '|') {
-            // Create a SingleCom instance to hold the vector of strings containing its command
-            if (vstring_chunks.size() > 0) {
-                SingleCom* single = new SingleCom(vstring_chunks);
-                current_com->right = single;
+        
+            // Create single command using the strings accumulated thus far
+            SingleCom* single = new SingleCom(vstring_chunks);
+            current_com->right = single;
+            vstring_chunks.clear();
 
-                vstring_chunks.clear();
-            }
- 
-            Or_Op* or_com = new Or_Op;
-            or_com->prev = current_com;
- 
+            // If this is the first command, assign the first_cmd object
             if (first_cmd == NULL) {
                 this->first_cmd = current_com;
             }
 
+            // Create an and_command object to point to the current command as prev
+            // Then set it to be the current command
+            Or_Op* or_com = new Or_Op;
+            or_com->prev = current_com;
+
+            current_com->next = or_com;
             current_com = or_com;
- 
-            //TEST REMOVE
-            //std::cout << "|| case reached" << std::endl;
+
+            // Remove the && from the vector of strings
+            vstring.erase(vstring.begin());
+
         }
         
         else if (temp.at(temp.size() - 1) == ';') {
-            // TEST REMOVE
-           // std::cout << "; case reached" << std::endl;
-
-
+            
             // Remove the semicolon from the string
             temp.pop_back();
            
@@ -104,23 +104,26 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
                 vstring_chunks.push_back(temp);
             }
 
-            if (vstring_chunks.size() > 0) {
-                SingleCom* single = new SingleCom(vstring_chunks);
-                current_com->right = single;
+            SingleCom* single = new SingleCom(vstring_chunks);
+            current_com->right = single;
+            vstring_chunks.clear();
 
-                vstring_chunks.clear();
-            }
-
-            Semi_Op* semi_com = new Semi_Op;
-            semi_com->prev = current_com;
- 
+            // If this is the first command, assign the first_cmd object
             if (first_cmd == NULL) {
-                 // TEST REMOVE
-               // std::cout << "in || case, first_cmd == null" << std::endl;
                 this->first_cmd = current_com;
             }
+
+            // Create an and_command object to point to the current command as prev
+            // Then set it to be the current command
+            Semi_Op* semi_com = new Semi_Op;
+            semi_com->prev = current_com;
+
+            current_com->next = semi_com;
             current_com = semi_com;
-        }
+
+            // Remove the && from the vector of strings
+            vstring.erase(vstring.begin());
+       }
        
         else if (temp.at(0) == '(') {
             // TEST REMOVE
@@ -269,15 +272,17 @@ bool CompositeCom::execute() {
 
 //    std::cout << "this->first_cmd->success = ";
 //    std::cout << this->first_cmd->success << std::endl;
-
+/*
     std::cout << "this->first_cmd->right->commands_vect = ";
     for (int i = 0; i < this->commands_vect.size(); i++)
         for (int j = 0; j < this->commands_vect.at(i).size(); j++)
             std::cout << this->commands_vect.at(i).at(j);
     std::cout << std::endl;
-
-
+*/
+    //I would like to come back and fix this ugliness, but functionality comes first
+    // It would be a purely cosmetic fix
     this->success = this->first_cmd->right->execute();
+    this->first_cmd->success = this->success;
     // TEST REMOVE
     //std::cout << "this->success = " << this->success << std::endl;
 
