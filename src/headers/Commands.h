@@ -10,7 +10,7 @@ class Commands {
     public:
         Commands();
         Commands(std::string command_in);// : cmd(command_in) {}
-        Commands(std::vector<std::string> string_vec_in);
+        Commands(std::vector<std::string>& string_vec_in);
 
         Commands* prev = NULL;
         Commands* right = NULL;

@@ -12,6 +12,7 @@
 
 CompositeCom::CompositeCom() : Commands() {}
 CompositeCom::CompositeCom(std::string command_in) : Commands(command_in) {}
+CompositeCom::CompositeCom(std::vector<std::string>& str_vec_in) : Commands(str_vec_in) {}
 
 bool CompositeCom::parse(std::vector<std::string>& vstring) {
 
@@ -24,7 +25,7 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
 */
 
     CompositeCom* current_com = new CompositeCom;
-
+    Paren* parenth_cmd = NULL;
     //TEST REMOVE
     //std::cout << "Assigned current_com to first_cmd" << std::endl;
  /*   std::cout << "vstring.size() = " << vstring.size() << std::endl;
@@ -46,11 +47,19 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
 
         // If binary connector found, store the current vector of strings as a command
         if (temp.size() == 2 && temp.at(0) == '&' && temp.at(1) == '&') {
-        
-            // Create single command using the strings accumulated thus far
-            SingleCom* single = new SingleCom(vstring_chunks);
-            current_com->right = single;
-            vstring_chunks.clear();
+       
+            // If there is a parenth_cmd that has not been assigned, assign it here
+            if (parenth_cmd != NULL) {
+                current_com->right = parenth_cmd;
+                parenth_cmd = NULL;
+            }
+
+            // Otherwise create a single command to assign the vector of strings stored thus far
+            else {
+                SingleCom* single = new SingleCom(vstring_chunks);
+                current_com->right = single;
+                vstring_chunks.clear();
+            }
 
             // If this is the first command, assign the first_cmd object
             if (first_cmd == NULL) {
@@ -70,11 +79,19 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
         }  
        
         else if (temp.size() == 2 && temp.at(0) == '|' && temp.at(1) == '|') {
-        
-            // Create single command using the strings accumulated thus far
-            SingleCom* single = new SingleCom(vstring_chunks);
-            current_com->right = single;
-            vstring_chunks.clear();
+             // If there is a parenth_cmd that has not been assigned, assign it here
+
+            // Check if there is an unassigned parentheses command
+            if (parenth_cmd != NULL) {
+                current_com->right = parenth_cmd;
+                parenth_cmd = NULL;
+            }
+            else {      
+                // Create single command using the strings accumulated thus far
+                SingleCom* single = new SingleCom(vstring_chunks);
+                current_com->right = single;
+                vstring_chunks.clear();
+            }
 
             // If this is the first command, assign the first_cmd object
             if (first_cmd == NULL) {
@@ -104,10 +121,17 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
                 vstring_chunks.push_back(temp);
             }
 
-            SingleCom* single = new SingleCom(vstring_chunks);
-            current_com->right = single;
-            vstring_chunks.clear();
-
+            // Check if there is an unassigned parentheses command
+            if (parenth_cmd != NULL) {
+                current_com->right = parenth_cmd;
+                parenth_cmd = NULL;
+            }
+            else {
+                SingleCom* single = new SingleCom(vstring_chunks);
+                current_com->right = single;
+                vstring_chunks.clear();
+            }
+            
             // If this is the first command, assign the first_cmd object
             if (first_cmd == NULL) {
                 this->first_cmd = current_com;
@@ -144,27 +168,34 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
 
                 // Run through the strings to find the ending parentheses, then send that whole string into a recursive parse call
                 // If no ending parentheses found, return false;
-                for (int i = 0; i < vstring.size(); i++) {
-                    // String to hold parsed characters within current string
+ 
+                while (vstring.size() > 0) {
                     std::string temp_s;
 
-                    for (int j = 0; j < vstring.at(i).size(); j++) {
-                        char current = vstring.at(i).at(j);
+                    while (vstring.at(0).size() > 0) {
+                        char current = vstring.at(0).at(0);
+                        temp_s.push_back(current);
+
+                        // Remove the char being analyzed from vstring
+                        vstring.at(0).erase(0, 0);
 
                         if (current == ')') {
-                           // Remove the ')' from the string
-                           vstring.at(i).erase(0, j);
+                            
+                            // Add string thus far onto running vector
+                            vstring_chunks.push_back(temp_s);
 
-                           // Add string thus far onto running vector
-                           vstring_chunks.push_back(temp_s);
+                            // Potential bug: Support for ); not yet implemented
+                            // If the character following the closing parenthese is not one of the following, the input is invalid, so end parse and return false
+                            if (vstring.at(0).size() > 0) {
+                                char next_c = vstring.at(0).at(0);
+                                if (next_c != '&' || next_c != '|' || next_c != ';' || next_c != ')') {
+                                    return false;
+                                }
+                            }
 
-                           // Breaks the outer for loop as well
-                           i = vstring.size();
-                           break;
-                        }                   
-
-                        temp_s.push_back(current);
-                    }
+                            break;
+                        }
+                    } 
                     
                     // Add analyzed string to the running vector
                     vstring_chunks.push_back(temp_s);
@@ -179,16 +210,18 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
                 }
 
                 // Recursive call to parse the command(s) within the parentheses
-                Paren* parenth = new Paren();
-                CompositeCom* temp_com = new CompositeCom();
-                // REMOVE make this assign by reference
-                temp_com->commands_vect = vstring_chunks;
-                temp_com->parse(vstring_chunks);
-                parenth->inner = temp_com;
-
-                // Set parentheses command to be the current one
-                current_com->right = parenth;
+                CompositeCom* temp_com = new CompositeCom(vstring_chunks);
+                temp_com->tokenize();
+                // If parse of inner content fails, return false
+                if (!temp_com->parse(temp_com->commands_vect)) {
+                    return false;
+                }
                 
+                // parenth objects are handled similarly to single commands and must therefore be stored into a variable declared at the start of parse
+                Paren* parenth = new Paren;
+                parenth->inner = temp_com;
+                parenth_cmd = parenth;
+
                 vstring_chunks.clear();
             }
         }

@@ -18,15 +18,9 @@ bool Semi_Op::execute() {
 
     // If there are more operations, continue running them
     if (this->next != NULL) {
-
-        // TEST REMOVE
-        //std::cout << "within and-execute. Calling next->execute" << std::endl;
-
         return this->next->execute();
     }
     else {
         return this->success;
     }
-
-    return right->execute();
 }
