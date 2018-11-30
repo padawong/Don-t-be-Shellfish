@@ -55,13 +55,14 @@ int main () {
                 std::cout << "Invalid input regarding parentheses." << std::endl;
             }
             else { 
-                newCommand->execute();
+
+         // TEST REMOVE
+        //std::cout << "parse complete" << std::endl;
+
+               newCommand->execute();
             }
         }
  
-        // TEST REMOVE
-        //std::cout << "parse complete" << std::endl;
-
         exit_loop = newCommand->exit;
         
         /*

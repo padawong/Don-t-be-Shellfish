@@ -102,6 +102,7 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
 
             // Check if there is an unassigned parentheses command
             if (parenth_cmd != NULL) {
+                vstring_chunks.clear();
                 current_com->right = parenth_cmd;
                 parenth_cmd = NULL;
             }
@@ -142,6 +143,7 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
 
             // Check if there is an unassigned parentheses command
             if (parenth_cmd != NULL) {
+                vstring_chunks.clear();
                 current_com->right = parenth_cmd;
                 parenth_cmd = NULL;
             }
