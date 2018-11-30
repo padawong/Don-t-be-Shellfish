@@ -35,7 +35,7 @@ Returns true in the event of each user command being executed properly, else fal
 
 ## TestCom
 
-The TestCom class simply utilizes stat and two of its macros to verify whether the passed in vector contains a valid file path or not. 
+The TestCom class simply utilizes stat() and two of its macros to verify whether the passed in vector contains a valid file path or not. It was much simpler to implement this as a child of SingleCom rather than a child of Commands, as in that case, we would be able to use that single command string containing just the test to run through and validate. 
 
 
 ## Bugs? 
@@ -48,3 +48,4 @@ List of bugs we came across:
 - Empty command NEWLINE results in failure 
 - (Not exactly a bug) Couldn't figure out how to test/verify the execution of commands, so instead we just test the parsing function and the bool return of a valid command
 - Came across a lot of issues regarding the parenthesis, a lot of cases work, but some cases fail, which we found odd as they mirrored previous test cases which passed successfully 
+- Pressing enter results in a seg fault, and exit is similarly causing some problems (probably something to do with how we assign its boolean value in one of the classes) 
