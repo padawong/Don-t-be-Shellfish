@@ -1,4 +1,6 @@
 #include "./headers/SingleCom.h"
+#include "./headers/TestCom.h"
+
 
 SingleCom::SingleCom() {}
 SingleCom::SingleCom(std::vector<std::string>& cmd_v) : Commands(cmd_v) {}
@@ -12,7 +14,30 @@ bool SingleCom::execute() {
         exit = true;
         return true;
     }
-    
+  
+     if(commands_vect.at(0) == "[" || commands_vect.at(0) == "test"){
+           //delete the first element of the array so we only pass through the flag and filepath
+           commands_vect.erase(commands_vect.begin());
+
+           TestCom* testComm = new TestCom(this->commands_vect);
+            
+           bool isValid = testComm->testLine();
+           
+           if (isValid){
+           success = true;
+           }
+           else{
+           success = false;
+           }
+     }
+
+
+
+
+
+
+
+
     // Array of char* w/ 1 more element than vector to end w/ NULL
     char* args[commands_vect.size() + 1];
 
@@ -23,8 +48,9 @@ bool SingleCom::execute() {
     for (int i = 1; i < commands_vect.size(); i++) {
         args[i] = (char*)commands_vect.at(i).c_str(); 
     }
-    args [commands_vect.size()] = NULL;
-     
+    args [commands_vect.size()] = NULL;  
+  
+
     // Now we actually use syscalls: fork, waitpid, execvp
     pid_t pid = fork();
 
@@ -33,9 +59,6 @@ bool SingleCom::execute() {
         // If the command returns an error, call perror
         if (execvp(args[0], args) == -1) {
             success = false;
-
-            // TEST REMOVE
-            std::cout << "Within single child. success = " << success << std::endl;
 
             perror("Invalid command");
             
