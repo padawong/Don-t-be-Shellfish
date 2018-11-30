@@ -30,7 +30,7 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
     //std::cout << "Assigned current_com to first_cmd" << std::endl;
  /*   std::cout << "vstring.size() = " << vstring.size() << std::endl;
 */
-    int test_count = 0;
+    //int test_count = 0;
 
     std::vector<std::string> vstring_chunks;
     
@@ -40,7 +40,7 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
 
     while(vstring.size() > 0) {
         // TEST REMOVE
-    //    std::cout << "while loop number: " << test_count << std::endl;
+        //std::cout << "while loop number: " << test_count << std::endl;
 
 
         // TEST REMOVE
@@ -225,30 +225,51 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
 
                     // TEST REMOVE
               //      std::cout << "within INNER while loop: current = " << current << std::endl;
+                        //std::cout << "erasing: " << vstring.at(0).at(0) << std::endl;
 
 
                         // Remove the char being analyzed from vstring
                         vstring.at(0).erase(vstring.at(0).begin());
 
+                        
+                      /*          // TEST REMOVE
+                        if (vstring.at(0).size() > 0)
+                                std::cout << "Erased. next_c = " << vstring.at(0).at(0) << std::endl;
+                                
+
+
+                        // TEST REMOVE
+                        for (int x = 0; x < vstring.size(); x++) {
+                            for (int y = 0; y < vstring.at(x).size(); y++) {
+                                std::cout << vstring.at(x).at(y);
+                            }
+                            std::cout << std::endl;
+                        }*/
+
+
+                        
+                        
                         if (current == ')') {
 
                             //
                             // TEST REMOVE
-               //             std::cout << "current = ) found" << std::endl;
+                            //std::cout << "current = ) found" << std::endl;
+
                             // Add string thus far onto running vector
                             temp_s.erase(temp_s.size() - 1);
                             vstring_chunks.push_back(temp_s);
 
-                            // Potential bug: Support for ); not yet implemented
                             // If the character following the closing parenthese is not one of the following, the input is invalid, so end parse and return false
                             if (vstring.at(0).size() > 0) {
 
-                                // TEST REMOVE
-                //                std::cout << ") found; vstring.at(0).size() = " << vstring.at(0).size() << std::endl;
+                              /*  // TEST REMOVE
+                                std::cout << "we know that size > 0. THE NEXT CHAR IS ?= " << vstring.at(0).at(0) << std::endl;
+                                std::cout << ") found; vstring.at(0).size() = " << vstring.at(0).size() << std::endl;
+                                std::cout << "next_c = " << vstring.at(0).at(0) << std::endl;
+                                std::cout << "WHAT IS HAPPENING" << std::endl;*/
 
 
-                                char next_c = vstring.at(0).at(0);
-                                if (next_c != '&' || next_c != '|' || next_c != ';' || next_c != ')') {
+                                if ((vstring.at(0).at(0) != '&') && (vstring.at(0).at(0) != '|') && (vstring.at(0).at(0) != ';') && (vstring.at(0).at(0) != ')')) {
                                     return false;
                                 }
                             }
@@ -389,16 +410,6 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
             */
         }
  
-       
-                
-       /* 
-        // If there are no other commands, save as first_cmd
-        if (current_com->prev == NULL) {
-            current_com = single;
-        }
-        else {
-            current_com->right = single;
-        }*/
     }
 
     current_com->next = NULL;

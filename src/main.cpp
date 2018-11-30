@@ -49,12 +49,19 @@ int main () {
         // TEST REMOVE
         //std::cout << "tokenize complete" << std::endl;
 
-        newCommand->parse(newCommand->commands_vect);
+        // Don't run if there's nothing to run
+        if (newCommand->commands_vect.size() > 0) {
+            if (!newCommand->parse(newCommand->commands_vect)) {
+                std::cout << "Invalid input regarding parentheses." << std::endl;
+            }
+            else { 
+                newCommand->execute();
+            }
+        }
  
         // TEST REMOVE
         //std::cout << "parse complete" << std::endl;
 
-        newCommand->execute();
         exit_loop = newCommand->exit;
         
         /*
