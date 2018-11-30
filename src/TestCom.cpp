@@ -1,16 +1,16 @@
-include "./headers/TestCom.h"
+#include "./headers/TestCom.h"
 
-        TestCom::TestCom(){}
-        TestCom::TestCom(std::vector<std::string>& cmd_v) :SingleCom(cmd_v) {}
+        TestCom::TestCom() : SingleCom() {}
+        TestCom::TestCom(std::vector<std::string>& cmd_v) : SingleCom(cmd_v) {}
             
         
-        bool testLine(){//RETURN A STRING OR A BOOL????
+        bool TestCom::testLine(){//RETURN A STRING OR A BOOL????
           
             // Array of char* w/ 1 more element than vector to end w/ NULL
             char* args[commands_vect.size()];
             
             // First element is always the command
-            args [0] = (char*)commands_vect.at(0).c_str();
+            args[0] = (char*)commands_vect.at(0).c_str();
             
             // All subsequent elements are arguments
             for (int i = 1; i < commands_vect.size(); i++) {
@@ -20,16 +20,17 @@ include "./headers/TestCom.h"
 
 
             struct stat sb;
-            string flag = argv[1];
+            std::string flag = args[0];
   
             //CASE (-f): Is it a regular file or not?            
             if( flag == "-f"){
                if (S_ISREG(sb.st_mode) != 0){
                     std::cout<< "(True)" << std::endl;
-                    
+                    return true;   
                }    
                 else{
                    std::cout<< "(False)" << std::endl;
+                    return false;
                 }
             }
 
@@ -37,19 +38,23 @@ include "./headers/TestCom.h"
             else if (flag == "-d"){
                 if(S_ISDIR(sb.st_mode) != 0){
                     std::cout << "(True)" << std::endl;
+                    return true;
                 }
                 else{
                     std::cout << "(False)" << std::endl;
+                    return false;
                 }
             }
 
             //CASE: Is it a vaild filepath or not?
             else{
-                if(stat(argv[1], &sb)){
+                if(stat(args[1], &sb)){
                     std::cout << "(True)" << std::endl;
+                    return true;
                 }
                 else{
                     std::cout << "(False)" << std::endl;
+                    return false;
                 }
             }
 
