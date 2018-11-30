@@ -272,6 +272,10 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
 
 
                                 if ((vstring.at(0).at(0) != '&') && (vstring.at(0).at(0) != '|') && (vstring.at(0).at(0) != ';') && (vstring.at(0).at(0) != ')')) {
+                                    // TEST REMOVE
+                                    std::cout << "&, |, ;, ) not found" << std::endl;
+
+                                    
                                     return false;
                                 }
                             }
@@ -304,6 +308,8 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
                 
                 // If all strings checked and no closing parentheses found, return false
                 if (inside_parens) {
+                    // TEST REMOVE
+                    std::cout << "inside_parens = true" << std::endl;
                     return false;
                 }
 
@@ -325,8 +331,15 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
                 // If parse of inner content fails, return false
                 
                 if (!temp_com->parse(temp_com->commands_vect)) {
+                    // TEST REMOVE
+                    std::cout << "inner parentheses parse returned false" << std::endl;
+                    
                     return false;
                 }
+               /* // TEST REMOVE
+                else {
+                    std::cout << "inner parentheses parse done" << std::endl;
+                }*/
                 
                 // parenth objects are handled similarly to single commands and must therefore be stored into a variable declared at the start of parse
                 Paren* parenth = new Paren;
@@ -373,33 +386,35 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
             break;
             */
     }
-        // TEST REMOVE
-        //std::cout << "WHILE LOOP ENDED; vstring_chunks.size() == " << vstring_chunks.size() << std::endl;
+    // TEST REMOVE
+    //std::cout << "WHILE LOOP ENDED; vstring_chunks.size() == " << vstring_chunks.size() << std::endl;
 
-        // If there is a parenth_cmd that has not been assigned, assign it here
-            if (parenth_cmd != NULL) {
-                
-                // TEST REMOVE
-                //std::cout << "parenth_cmd->inner->first_cmd->right->commands_vect.at(0) = " << parenth_cmd->inner->first_cmd->right->commands_vect.at(0) << std::endl;
-                
-                vstring_chunks.clear();
-                
-                // TEST REMOVE
-                //std::cout << "current_com->right = parenth_cmd" << std::endl;
-                
-                current_com->right = parenth_cmd;
-                parenth_cmd = NULL;
-            }
-
-
+    
     if (vstring_chunks.size() > 0) {
-        // Add final string vector to a SingleCom
-        SingleCom* single = new SingleCom(vstring_chunks);
-        current_com->right = single;
-                 
-        //TEST REMOVE
-        //std::cout << "single->commands_vect.at(0) = " << single->commands_vect.at(0) << std::endl;
-        
+    
+        // If there is a parenth_cmd that has not been assigned, assign it here
+        if (parenth_cmd != NULL) {
+            
+            // TEST REMOVE
+            //std::cout << "parenth_cmd->inner->first_cmd->right->commands_vect.at(0) = " << parenth_cmd->inner->first_cmd->right->commands_vect.at(0) << std::endl;
+            
+            vstring_chunks.clear();
+            
+            // TEST REMOVE
+            //std::cout << "current_com->right = parenth_cmd" << std::endl;
+            
+            current_com->right = parenth_cmd;
+            parenth_cmd = NULL;
+        }
+
+        else {
+            // Add final string vector to a SingleCom
+            SingleCom* single = new SingleCom(vstring_chunks);
+            current_com->right = single;
+                     
+            //TEST REMOVE
+            //std::cout << "single->commands_vect.at(0) = " << single->commands_vect.at(0) << std::endl;
+        }        
         
         if (this->first_cmd == NULL) {
             this->first_cmd = current_com;
@@ -431,13 +446,14 @@ bool CompositeCom::execute() {
 
 //    std::cout << "this->first_cmd->success = ";
 //    std::cout << this->first_cmd->success << std::endl;
-/*
-    std::cout << "this->first_cmd->right->commands_vect = ";
+
+    // TEST REMOVE
+/*    std::cout << "this->first_cmd->right->commands_vect = ";
     for (int i = 0; i < this->commands_vect.size(); i++)
         for (int j = 0; j < this->commands_vect.at(i).size(); j++)
             std::cout << this->commands_vect.at(i).at(j);
-    std::cout << std::endl;
-*/
+    std::cout << std::endl;*/
+
     //I would like to come back and fix this ugliness, but functionality comes first
     // It would be a purely cosmetic fix
     this->success = this->first_cmd->right->execute();
