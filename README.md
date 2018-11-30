@@ -1,6 +1,8 @@
-﻿# Assignment 2: README
+﻿# Hw3
+ # Assignment 3: README
+ 
 
-## WE HAVEN'T BEEN ABLE TO FIGURE OUT HOW TO TAG OUR SUBMISSION AS hw2
+
 
 ***Summary:*** 
     So far, we have completed all the requirements for assignment 3. Implementing the Composite pattern, we:
