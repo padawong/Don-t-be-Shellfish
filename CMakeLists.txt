@@ -9,6 +9,7 @@ ADD_EXECUTABLE(rshell
     ./src/Commands.cpp
     ./src/CompositeCom.cpp
     ./src/SingleCom.cpp
+    ./src/TestCom.cpp
     ./src/and_op.cpp
     ./src/or_op.cpp
     ./src/semi_op.cpp
@@ -20,6 +21,7 @@ ADD_EXECUTABLE(test
     ./src/Commands.cpp
     ./src/CompositeCom.cpp
     ./src/SingleCom.cpp
+    ./src/TestCom.cpp
     ./src/and_op.cpp
     ./src/or_op.cpp
     ./src/semi_op.cpp
