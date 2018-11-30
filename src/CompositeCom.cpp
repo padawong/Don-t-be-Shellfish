@@ -40,11 +40,11 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
 
     while(vstring.size() > 0) {
         // TEST REMOVE
-        std::cout << "while loop number: " << test_count << std::endl;
+    //    std::cout << "while loop number: " << test_count << std::endl;
 
 
         // TEST REMOVE
-        std::cout << "vstring.size() = " << vstring.size() << std::endl;
+      //  std::cout << "vstring.size() = " << vstring.size() << std::endl;
 
 
         std::string temp = vstring.at(0);
@@ -56,10 +56,14 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
             if (parenth_cmd != NULL) {
                 
                 // TEST REMOVE
-                std::cout << "parenth_cmd->inner->first_cmd->right->commands_vect.at(0) = " << parenth_cmd->inner->first_cmd->right->commands_vect.at(0) << std::endl;
+             //   std::cout << "parenth_cmd->inner->first_cmd->right->commands_vect.at(0) = " << parenth_cmd->inner->first_cmd->right->commands_vect.at(0) << std::endl;
+               
+               
                 vstring_chunks.clear();
+               
+               
                 // TEST REMOVE
-                std::cout << "current_com->right = parenth_cmd" << std::endl;
+               // std::cout << "current_com->right = parenth_cmd" << std::endl;
                 
                 current_com->right = parenth_cmd;
                 parenth_cmd = NULL;
@@ -166,7 +170,7 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
        
         else if (temp.at(0) == '(') {
             // TEST REMOVE
-           std::cout << "( case reached" << std::endl;
+         //  std::cout << "( case reached" << std::endl;
 
 
 
@@ -176,7 +180,7 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
             if (vstring_chunks.size() > 0) {
 
                 // TEST REMOVE
-                std::cout << "vstring_chunks.size() > 0" << std::endl;
+          //      std::cout << "vstring_chunks.size() > 0" << std::endl;
                
                
                 vstring_chunks.push_back(temp);
@@ -186,7 +190,7 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
                
                
                 // TEST REMOVE
-                std::cout << "vstring_chunks.size() !> 0" << std::endl;
+           //     std::cout << "vstring_chunks.size() !> 0" << std::endl;
                 
                 
                 // temp = vstring.at(0)
@@ -194,12 +198,12 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
                 temp.erase(temp.begin());
 
                 // TEST REMOVE
-                std::cout << "temp = " << temp << std::endl;
+            //    std::cout << "temp = " << temp << std::endl;
 
                 vstring.at(0).erase(vstring.at(0).begin());
 
                 // TEST REMOVE
-                std::cout << "vstring.at(0) = " << vstring.at(0) << std::endl;
+             //   std::cout << "vstring.at(0) = " << vstring.at(0) << std::endl;
 
 
 
@@ -220,7 +224,7 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
                         temp_s.push_back(current);
 
                     // TEST REMOVE
-                    std::cout << "within INNER while loop: current = " << current << std::endl;
+              //      std::cout << "within INNER while loop: current = " << current << std::endl;
 
 
                         // Remove the char being analyzed from vstring
@@ -230,7 +234,7 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
 
                             //
                             // TEST REMOVE
-                            std::cout << "current = ) found" << std::endl;
+               //             std::cout << "current = ) found" << std::endl;
                             // Add string thus far onto running vector
                             temp_s.erase(temp_s.size() - 1);
                             vstring_chunks.push_back(temp_s);
@@ -240,7 +244,7 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
                             if (vstring.at(0).size() > 0) {
 
                                 // TEST REMOVE
-                                std::cout << ") found; vstring.at(0).size() = " << vstring.at(0).size() << std::endl;
+                //                std::cout << ") found; vstring.at(0).size() = " << vstring.at(0).size() << std::endl;
 
 
                                 char next_c = vstring.at(0).at(0);
@@ -255,7 +259,7 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
                             
 
                             // TEST REMOVE
-                            std::cout << "about to break" << std::endl;
+//                            std::cout << "about to break" << std::endl;
 
                             inside_parens = false;
 
@@ -273,7 +277,7 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
                 }
                 
                 // TEST REMOVE
-                std::cout << "outside of parsing part of parens. gonna check vstring.size() now" << std::endl;
+ //               std::cout << "outside of parsing part of parens. gonna check vstring.size() now" << std::endl;
                 
                 // If all strings checked and no closing parentheses found, return false
                 if (inside_parens) {
@@ -281,17 +285,17 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
                 }
 
                 // TEST REMOVE
-                std::cout << "Finished checking vstring.size()" << std::endl;
+  //              std::cout << "Finished checking vstring.size()" << std::endl;
 
                 // TEST REMOVE
-                std::cout << "creating temp_com and tokenizing" << std::endl;
+   /*             std::cout << "creating temp_com and tokenizing" << std::endl;
                 std::cout << "vstring_chunks: " <<std::endl;
                 for (int i = 0; i < vstring_chunks.size(); i++) {
                     for (int j = 0; j < vstring_chunks.at(i).size(); j++) {
                         std::cout << vstring_chunks.at(i).at(j);
                     }
                 }
-
+*/
                 // Recursive call to parse the command(s) within the parentheses
                 CompositeCom* temp_com = new CompositeCom(vstring_chunks);
                 temp_com->tokenize();
@@ -305,7 +309,7 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
                 Paren* parenth = new Paren;
                 parenth->inner = temp_com;
                 parenth_cmd = parenth;
-
+/*
                 // TEST REMOVE
                 std::cout << "temp_com->first_cmd->right->commands_vect.at(0) = " << temp_com->first_cmd->right->commands_vect.at(0) << std::endl;
                 vstring_chunks.clear();
@@ -317,7 +321,7 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
                 // TEST REMOVE
                 std::cout << "parenth_cmd->inner->first_cmd->right->commands_vect.at(0) = " << parenth_cmd->inner->first_cmd->right->commands_vect.at(0) << std::endl;
                 vstring_chunks.clear();
-            }
+ */           }
         }
 
         else {
@@ -340,23 +344,25 @@ bool CompositeCom::parse(std::vector<std::string>& vstring) {
         }
 
        //TEST REMOVE
-       test_count++;
+       //test_count++;
         /* std::cout << "END OF WHILE LOOP REACHED." << std::endl;
         if (test_count > 15)
             break;
             */
     }
         // TEST REMOVE
-        std::cout << "WHILE LOOP ENDED; vstring_chunks.size() == " << vstring_chunks.size() << std::endl;
+        //std::cout << "WHILE LOOP ENDED; vstring_chunks.size() == " << vstring_chunks.size() << std::endl;
 
         // If there is a parenth_cmd that has not been assigned, assign it here
             if (parenth_cmd != NULL) {
                 
                 // TEST REMOVE
-                std::cout << "parenth_cmd->inner->first_cmd->right->commands_vect.at(0) = " << parenth_cmd->inner->first_cmd->right->commands_vect.at(0) << std::endl;
+                //std::cout << "parenth_cmd->inner->first_cmd->right->commands_vect.at(0) = " << parenth_cmd->inner->first_cmd->right->commands_vect.at(0) << std::endl;
+                
                 vstring_chunks.clear();
+                
                 // TEST REMOVE
-                std::cout << "current_com->right = parenth_cmd" << std::endl;
+                //std::cout << "current_com->right = parenth_cmd" << std::endl;
                 
                 current_com->right = parenth_cmd;
                 parenth_cmd = NULL;

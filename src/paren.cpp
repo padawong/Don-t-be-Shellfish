@@ -6,7 +6,7 @@ Paren::Paren(CompositeCom* in) : CompositeCom () , inner(in){}
 bool Paren::execute() {
 
     // TEST REMOVE
-    std::cout << "within paren execute" << std::endl;
+    //std::cout << "within paren execute" << std::endl;
 
-    return inner->first_cmd->right->execute();
+    return inner->execute();
 }
