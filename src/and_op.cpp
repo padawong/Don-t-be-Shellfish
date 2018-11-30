@@ -31,7 +31,7 @@ bool And_Op::execute() {
     if (this->next != NULL) {
 
         // TEST REMOVE
-        //std::cout << "within and-execute. Calling next->execute" << std::endl;
+        std::cout << "within and-execute. Calling next->execute" << std::endl;
 
         return this->next->execute();
     }

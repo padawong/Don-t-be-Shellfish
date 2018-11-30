@@ -6,9 +6,9 @@
 class Paren : public CompositeCom {
     public:
         Paren();
-        Paren(Commands* in);
+        Paren(CompositeCom* in);
 
-        Commands* inner;
+        CompositeCom* inner;
 
         bool execute();
 };
