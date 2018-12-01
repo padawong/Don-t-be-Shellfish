@@ -25,9 +25,11 @@ bool SingleCom::execute() {
            
            if (isValid){
            success = true;
+           return true;
            }
            else{
            success = false;
+           return false;
            }
      }
 
