@@ -3,66 +3,101 @@
 #include <vector>
 #include <string>
 #include "../src/headers/CompositeCom.h"
-/*
+#include "../src/headers/paren.h"
 
-//char** ARGV_IN;
-
-TEST(EchoTest, single_command_parse) {
+// Tests tokenize function which takes a string of input and deliminates " " and "\n" and turns it into a vector of strings
+TEST(EchoTest, tokenize) {
     std::string test_string;
-    test_string = "rm -r TestDirectory";
+    test_string = "echo 1 && ((echo 2; echo 3) || echo 4)";
     
     CompositeCom* test_com = new CompositeCom(test_string);
-    test_com->parse();
+    test_com->tokenize();
 
-    // parse() results in a vector of string vectors
-    // each string vector is each single command which may contain multiple strings
-
-    // command should contain 3 strings: "rm" "-r" "TestDirectory"
-    // vector size should be 3
-    std::vector<std::string> command = test_com->commands_vector.at(0);
-
-    EXPECT_EQ("rm", command.at(0));
-    EXPECT_EQ("-r", command.at(1));
-    EXPECT_EQ("TestDirectory", command.at(2));
-    EXPECT_EQ(3, command.size());
+    EXPECT_EQ("echo", test_com->commands_vect.at(0));
+    EXPECT_EQ("1", test_com->commands_vect.at(1));
+    EXPECT_EQ("&&", test_com->commands_vect.at(2));
+    EXPECT_EQ("((echo", test_com->commands_vect.at(3));
+    EXPECT_EQ("2;", test_com->commands_vect.at(4));
+    EXPECT_EQ("echo", test_com->commands_vect.at(5));
+    EXPECT_EQ("3)", test_com->commands_vect.at(6));
+    EXPECT_EQ("||", test_com->commands_vect.at(7));
+    EXPECT_EQ("echo", test_com->commands_vect.at(8));
+    EXPECT_EQ("4)", test_com->commands_vect.at(9));
+    EXPECT_EQ(10, test_com->commands_vect.size());
 
     delete test_com;
 }
 
-TEST(EchoTest, composite_parse) {
+// Tests that parse correctly generates first_cmd->right
+// Does so by checking that first_cmd->right->commands_vect holds the command
+TEST(EchoTest, parse_single) {
     std::string test_string;
-    test_string = "ls -a && echo cool || mkdir COOL";
+    test_string = "test -e ./src";
     
     CompositeCom* test_com = new CompositeCom(test_string);
-    test_com->parse();
+    test_com->tokenize();
+    test_com->parse(test_com->commands_vect);
 
-    // parse() results in a vector of string vectors
-    // each string vector is each single command which may contain multiple strings
+    // test_com->first_cmd->right->commands_vect should have "test", "-e", "src"
+    // I know the path is ugly... shhhhhhh...
+    EXPECT_EQ("test", test_com->first_cmd->right->commands_vect.at(0));
+    EXPECT_EQ("-e", test_com->first_cmd->right->commands_vect.at(1));
+    EXPECT_EQ("./src", test_com->first_cmd->right->commands_vect.at(2));
+    EXPECT_EQ(3, test_com->first_cmd->right->commands_vect.size());
 
-    // comm1 should contain two strings: "ls" and "-a"
-    std::vector<std::string> comm1 = test_com->commands_vector.at(0);
-
-    // "&&" "echo" "cool"
-    std::vector<std::string> comm2 = test_com->commands_vector.at(1);
-
-    // "||" "mkdir" COOL"
-    std::vector<std::string> comm3 = test_com->commands_vector.at(2);
-
-
-    EXPECT_EQ("ls", comm1.at(0));
-    EXPECT_EQ("-a", comm1.at(1));
-    EXPECT_EQ(2, comm1.size());
-
-    EXPECT_EQ("&&", comm2.at(0));
-    EXPECT_EQ("echo", comm2.at(1));
-    EXPECT_EQ("cool", comm2.at(2));
-    EXPECT_EQ(3, comm2.size());
-
-    EXPECT_EQ("||", comm3.at(0));
-    EXPECT_EQ("mkdir", comm3.at(1));
-    EXPECT_EQ("COOL", comm3.at(2));
-    EXPECT_EQ(3, comm3.size());
+    delete test_com;
+}
+/*
+// Tests that parse correctly generates a string of commands containing nested parentheses 
+// Does so by checking that the FIRST connector (&&) holds the expected command on the right
+TEST(EchoTest, parse_oneone__parentheses) {
+    std::string test_string;
+    test_string = "(echo hello)";
     
+    CompositeCom* test_com = new CompositeCom(test_string);
+    test_com->tokenize();
+    test_com->parse(test_com->commands_vect);
+    
+    Paren* in_parenth = test_com->first_cmd->right;
+    std::vector<std::string> commands = in_parenth->inner->first_cmd->commands_vect;
+    
+    EXPECT_EQ("echo", commands.at(0));
+    EXPECT_EQ("hello", test_com->commands_vect.at(1));
+    EXPECT_EQ(2, test_com->commands_vect.size());
+
+
+    delete test_com;
+}
+*/
+/*
+// Tests that parse correctly generates a string of commands containing nested parentheses 
+// Does so by checking that the FIRST connector (&&) holds the expected command on the right
+TEST(EchoTest, parse_parentheses) {
+    std::string test_string;
+    test_string = "echo 1 && (echo 2; echo 3) || echo 4))";
+    
+    CompositeCom* test_com = new CompositeCom(test_string);
+    test_com->tokenize();
+    test_com->parse(test_com->commands_vect);
+    
+    // Testing first connector's right command
+    // Third connector is &&, right should be a parens object containing two commands connected by ||
+    // Testing that "echo 3" is where it is expected to be
+
+    //Commands* outside_parentheses = test_com->first_cmd->next;
+    //Commands* inner_parentheses = outside_parentheses->inner->first_cmd;
+    // outside_parentheses->inner->first_cmd->next = echo 4 command
+    //Commands* inner_p_cmd1 = inner_parentheses->inner->first_cmd->right->;
+    Paren* outer_par = test_com->first_cmd->next;
+    Paren* inner_par = outer_par->inner->first_cmd->right;
+    
+    std::vector<std::string> commands = inner_par->inner->first_cmd->right->commands_vect;
+    
+    EXPECT_EQ("echo", commands.at(0));
+    EXPECT_EQ("2", test_com->commands_vect.at(1));
+    EXPECT_EQ(2, test_com->commands_vect.size());
+
+
     delete test_com;
 }
 
@@ -112,7 +147,6 @@ TEST(EchoTest, valid_command) {
 
     EXPECT_EQ(true, success);
 }
-
 */
 int main(int argc, char **argv) {
 //  ARGV_IN = argv;
