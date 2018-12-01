@@ -76,13 +76,13 @@ bool SingleCom::execute() {
     // Child process is where we run execvp
     if (pid == 0) {
         // If the command returns an error, call perror
-        if (execvp(args[0], args) == -1) {
+        if (execvp(args[0], args) < 0) {
             success = false;
 
             perror("Invalid command");
             
-            return success;
-            //return false;
+            //return success;
+            return false;
         }
     }
 
@@ -94,6 +94,7 @@ bool SingleCom::execute() {
             
             perror("Parent wait failed");
             //return false;
+            return false;
         }
 
     }
