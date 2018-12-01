@@ -16,10 +16,8 @@ using namespace std;
 
 class TestCom : public SingleCom {  
     public:
-        //vector holding the single command
-        vector<string> cmds;
         TestCom();
-        TestCom(std::vector<std::string>& cmd_v);
+        TestCom(std::vector<std::string> &cmd_v);
             
         bool testLine();
 };
