@@ -3,7 +3,7 @@
 
 
 SingleCom::SingleCom() {}
-SingleCom::SingleCom(std::vector<std::string>& cmd_v) : Commands(cmd_v) {}
+SingleCom::SingleCom(std::vector<std::string> &cmd_v) : Commands(cmd_v) {}
 
 bool SingleCom::execute() {
    

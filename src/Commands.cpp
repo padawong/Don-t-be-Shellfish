@@ -13,7 +13,7 @@ Commands::Commands() {}
 Commands::Commands(std::string command_in) {
     cmd = command_in;
 }
-Commands::Commands(std::vector<std::string> string_vec_in) {
+Commands::Commands(std::vector<std::string> &string_vec_in) {
     commands_vect = string_vec_in;
 }
 
