@@ -22,10 +22,16 @@ bool SingleCom::execute() {
         // Check for closing bracket. If does not exist, return false
         // If does exist, remove from vector
         if (commands_vect.at(0).at(0) == '[') {
+
             // Super ugly, but basically it's: the last character of the last string in the vector
             if (commands_vect.at(commands_vect.size() - 1).at(commands_vect.at(commands_vect.size() - 1).size() - 1) == ']') {
                 // Remove opening bracket
                 commands_vect.at(0).erase(commands_vect.at(0).begin());
+
+                // If the opening bracket was the only element in the string, remove the string
+                if (commands_vect.at(0).size() == 0) {
+                    commands_vect.erase(commands_vect.begin());
+                }
                 // Remove closing bracket
                 commands_vect.at(commands_vect.size() - 1).erase(commands_vect.at(commands_vect.size() - 1).size() - 1);
             }
