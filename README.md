@@ -1,7 +1,10 @@
 ﻿# Hw3
  # Assignment 3: README
  
-
+KNOWN BUGS: exit doesn't work very well. When it's chained with commands it doesn't seem to work when the commands are too long
+If a valid execvp command is followed by bad variable, it won't flag as false
+Surely there are more; will update
+Not enough test cases
 
 
 ***Summary:*** 
