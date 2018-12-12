@@ -1,6 +1,6 @@
 #include "./headers/SingleCom.h"
 #include "./headers/TestCom.h"
-
+#include "headers/Redir.h"
 
 SingleCom::SingleCom() {}
 SingleCom::SingleCom(std::vector<std::string> &cmd_v) : Commands(cmd_v) {}
@@ -54,7 +54,20 @@ bool SingleCom::execute() {
         return success;
     }
 
+    // CHECK IF REDIRECTION OR PIPING
+    // If so, outsource the execution
+    // MIGHT IMPLEMENT THIS LATER, BUT IT'S NOT REALLY NECESSARY:
+    // If within a quotation marks, disregard the operator
+    // int in_quote = 0;
 
+    // vector containing <, >, >> possibly contains a preceding number; checks for this case too
+    for (int i = 0; i < commands_vect.size(); i++) {
+        if (commands_vect.at(i).at(0) == '>' || commands_vect.at(i).at(0) == '<' || commands_vect.at(i).at(0) == '|' || (commands_vect.at(i).size() > 1 && (commands_vect.at(i).at(1) == '>' || commands_vect.at(i).at(1) == '<'))) {
+            Redir* redir_cmd = new Redir(this->commands_vect);
+            this->success = redir_cmd->execute();
+            return success;
+        }
+    }
 
 
     // Array of char* w/ 1 more element than vector to end w/ NULL
