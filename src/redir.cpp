@@ -64,8 +64,6 @@ bool Redir::execute() {
     char* args[count + 1];
     for (int i = 0; i < count; i++) {
         args[i] = (char*)commands_vect.at(i).c_str();
-
-        std::cout << "Element being added: " << commands_vect.at(i) << std::endl;
     }
     args [count] = NULL;
 
@@ -91,9 +89,15 @@ bool Redir::execute() {
             close(fd0);
         }
 
-        if (cmd == ">") {
+        if (cmd == ">" || cmd == ">>") {
             int fd1;
-            if ((fd1 = open(right_txt[0], O_CREAT|O_TRUNC|O_WRONLY, 0644)) < 0) {
+            if (cmd == ">") {
+                fd1 = open(right_txt[0], O_CREAT|O_TRUNC|O_WRONLY, 0644);
+            }
+            if (cmd == ">>") {
+                fd1 = open(right_txt[0], O_WRONLY|O_APPEND);
+            }
+            if (fd1 < 0) {
                 perror("Could not open output file");
                 return false;
             }
