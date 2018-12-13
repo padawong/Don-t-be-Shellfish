@@ -155,6 +155,10 @@ bool Redir::execute() {
                     perror("Invalid command");
                     return false;
                 }
+                if (waitpid(0, NULL, 0) == -1) {
+                    perror("Parent wait failed");
+                    return false;
+                }
             }
         }
 
@@ -176,12 +180,12 @@ bool Redir::execute() {
             perror("Parent wait failed");
             return false;
         }
- 
+/* 
         if (cmd == "|") {
             //write(
             dup2(fd[1], 1);
             close(fd[0]);
-        }
+        }*/
    }
 
     return true;
