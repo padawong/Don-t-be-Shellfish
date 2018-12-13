@@ -5,6 +5,9 @@
 #include <string>
 #include <vector>
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcnt1.h>
 
 // Apparently < can have info on both sides OR just info on the right side
 

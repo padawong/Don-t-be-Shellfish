@@ -62,7 +62,8 @@ bool SingleCom::execute() {
 
     // vector containing <, >, >> possibly contains a preceding number; checks for this case too
     for (int i = 0; i < commands_vect.size(); i++) {
-        if (commands_vect.at(i).at(0) == '>' || commands_vect.at(i).at(0) == '<' || commands_vect.at(i).at(0) == '|' || (commands_vect.at(i).size() > 1 && (commands_vect.at(i).at(1) == '>' || commands_vect.at(i).at(1) == '<'))) {
+        // If necessary to include handling for situations specifying file descriptor 0, 1, 2, will come back and re-add it. For now, just wanna get the basics working
+        if (commands_vect.at(i).at(0) == '>' || commands_vect.at(i).at(0) == '<' || commands_vect.at(i).at(0) == '|') {// || (commands_vect.at(i).size() > 1 && (commands_vect.at(i).at(1) == '>' || commands_vect.at(i).at(1) == '<'))) {
             Redir* redir_cmd = new Redir(this->commands_vect);
             this->success = redir_cmd->execute();
             return success;
