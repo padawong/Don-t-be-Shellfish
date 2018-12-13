@@ -65,6 +65,11 @@ bool Redir::execute() {
 
     pid_t pid = fork();
 
+    if (pid < 0) {
+        perror("Fork failed");
+        return false;
+    }
+
     if (pid == 0) {
         //Assuming valid input, at this point we have our left_str, cmd, right_str
 
@@ -76,10 +81,8 @@ bool Redir::execute() {
                 perror("Could not open input file");
                 return false;
             }
-            dup2(fd0, 0);
-
+            dup2(fd0, STDIN_FILENO);
             close(fd0);
-
         }
 
         if (cmd == ">") {
@@ -92,10 +95,14 @@ bool Redir::execute() {
             close(fd1);
         }
 
+        if (cmd == "|") {
+            write(
         if (execvp(args[0], args) < 0) {
             perror("Invalid command");
             return false;
         }
+
+        
     }
     
     if (pid > 0) {
@@ -106,7 +113,6 @@ bool Redir::execute() {
             perror("Parent wait failed");
             return false;
         }
-
     }
 
     return true;
