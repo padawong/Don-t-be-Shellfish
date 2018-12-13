@@ -51,17 +51,23 @@ bool Redir::execute() {
         right_txt[i] = (char*)commands_vect.at(count).c_str();
         count++;
     }
+    
+    // Decrements count so that the filename is not saved into args
+    // (this fixed the input is output problem!!)
+    count--;
 
     // Hacky, but if it's an echo, erase the last string which is the filepath
     if (commands_vect.at(0) == "echo") {
-        commands_vect.erase(commands_vect.end());
+        commands_vect.pop_back();
     }
 
-    char* args[commands_vect.size() + 1];
-    for (int i = 0; i < commands_vect.size(); i++) {
+    char* args[count + 1];
+    for (int i = 0; i < count; i++) {
         args[i] = (char*)commands_vect.at(i).c_str();
+
+        std::cout << "Element being added: " << commands_vect.at(i) << std::endl;
     }
-    args [commands_vect.size()] = NULL;
+    args [count] = NULL;
 
     pid_t pid = fork();
 
@@ -87,7 +93,7 @@ bool Redir::execute() {
 
         if (cmd == ">") {
             int fd1;
-            if ((fd1 = creat(right_txt[0], 0644)) < 0) {
+            if ((fd1 = open(right_txt[0], O_CREAT|O_TRUNC|O_WRONLY, 0644)) < 0) {
                 perror("Could not open output file");
                 return false;
             }
@@ -96,7 +102,9 @@ bool Redir::execute() {
         }
 
         if (cmd == "|") {
-            write(
+            //write(
+        }
+
         if (execvp(args[0], args) < 0) {
             perror("Invalid command");
             return false;
