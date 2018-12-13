@@ -1,6 +1,6 @@
 #include "./headers/SingleCom.h"
 #include "./headers/TestCom.h"
-#include "headers/Redir.h"
+#include "headers/redir.h"
 
 SingleCom::SingleCom() {}
 SingleCom::SingleCom(std::vector<std::string> &cmd_v) : Commands(cmd_v) {}
