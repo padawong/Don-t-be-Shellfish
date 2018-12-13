@@ -44,29 +44,44 @@ bool Redir::execute() {
         count++;
         //commands_vect.erase(commands_vect.begin());
     }
-    char* right_txt[commands_vect.size() - count];
-    // REMOVE: might want to add handling for nothing following the cmd operator
-    
-    for (int i = 0; count < commands_vect.size(); i++) {
-        right_txt[i] = (char*)commands_vect.at(count).c_str();
-        count++;
+    // Store the left side of the operator into args
+    // REMOVE: this won't work if operators with no left side are supported
+    if (commands_vect.at(count - 1) == "echo") {
+        commands_vect.erase(commands_vect.begin() + (--count));
     }
-    
-    // Decrements count so that the filename is not saved into args
-    // (this fixed the input is output problem!!)
-    count--;
-
-    // Hacky, but if it's an echo, erase the last string which is the filepath
-    if (commands_vect.at(0) == "echo") {
-        commands_vect.pop_back();
-    }
-
     char* args[count + 1];
+    // TEST REMOVE
+    //  std::cout << "    final count = " << count << std::endl;
     for (int i = 0; i < count; i++) {
         args[i] = (char*)commands_vect.at(i).c_str();
+
+        // TEST REMOVE
+        //std::cout << "args[" << i << "] = " << commands_vect.at(i) << std::endl;
     }
     args [count] = NULL;
 
+    char* right_txt[commands_vect.size() - count + 1];
+    // REMOVE: might want to add handling for nothing following the cmd operator
+    
+    // Store the string on the right side of the operator
+    for (int i = 0; count < commands_vect.size(); i++) {
+        right_txt[i] = (char*)commands_vect.at(count).c_str();
+
+
+        // TEST REMOVE
+        //std::cout << "right_txt[" << i << "] = " << commands_vect.at(count) << std::endl;
+        //std::cout << "    count = " << count << std::endl;
+
+        count++;
+    }
+    count--;
+    right_txt[count] = NULL;
+    
+    int fd[2];
+    if (cmd == "|") {
+        pipe(fd);
+    }
+    
     pid_t pid = fork();
 
     if (pid < 0) {
@@ -89,11 +104,16 @@ bool Redir::execute() {
             close(fd0);
         }
 
+        // Output redirection
         if (cmd == ">" || cmd == ">>") {
             int fd1;
+
+            // Overwrite
             if (cmd == ">") {
                 fd1 = open(right_txt[0], O_CREAT|O_TRUNC|O_WRONLY, 0644);
             }
+
+            // Append
             if (cmd == ">>") {
                 fd1 = open(right_txt[0], O_WRONLY|O_APPEND);
             }
@@ -105,13 +125,40 @@ bool Redir::execute() {
             close(fd1);
         }
 
+        // USING https://www.cs.rutgers.edu/~pxk/416/notes/c-tutorials/pipe.html
+        // Not sure if it's necessary to have two forks, but this website does, so I'm gonna try that
+        // Otherwise I don't see a good way to run execvp on both commands
         if (cmd == "|") {
-            //write(
+            pid_t pipe_pid = fork();
+
+            if (pipe_pid < 0) {
+                perror("Fork failed");
+                return false;
+            }
+            if (pipe_pid == 0) {            
+                dup2(fd[0], 0);
+                // "child does not need this end of hte pipe"
+                close(fd[1]);
+                if (execvp(args[0], args) < 0) {
+                    perror("Invalid command");
+                    return false;
+                }
+            }
+            if (pipe_pid > 0) {
+                dup2(fd[1], 1);
+                close(fd[0]);
+                if (execvp(right_txt[0], right_txt) < 0) {
+                    perror("Invalid command");
+                    return false;
+                }
+            }
         }
 
-        if (execvp(args[0], args) < 0) {
-            perror("Invalid command");
-            return false;
+        else {
+            if  (execvp(args[0], args) < 0) {
+                perror("Invalid command");
+                return false;
+            }
         }
 
         
@@ -120,12 +167,18 @@ bool Redir::execute() {
     if (pid > 0) {
     // since child pid = 0, we are waiting for child = 0
        if (waitpid(0, NULL, 0) == -1) {
-            success = false;
+            //success = false;
             
             perror("Parent wait failed");
             return false;
         }
-    }
+ 
+        if (cmd == "|") {
+            //write(
+            dup2(fd[1], 1);
+            close(fd[0]);
+        }
+   }
 
     return true;
 
