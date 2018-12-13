@@ -51,19 +51,21 @@ bool Redir::execute() {
     }
     char* args[count + 1];
     // TEST REMOVE
-    //  std::cout << "    final count = " << count << std::endl;
+      //std::cout << "    final count = " << count << std::endl;
+      //std::cout << "    commands_vect.size() - count + 1 = " << commands_vect.size() - count + 1 << std::endl;
     for (int i = 0; i < count; i++) {
         args[i] = (char*)commands_vect.at(i).c_str();
 
         // TEST REMOVE
         //std::cout << "args[" << i << "] = " << commands_vect.at(i) << std::endl;
     }
-    args [count] = NULL;
+    args[count] = NULL;
 
-    char* right_txt[commands_vect.size() - count + 1];
+    char* right_txt[commands_vect.size() - (count + 1)];
     // REMOVE: might want to add handling for nothing following the cmd operator
     
     // Store the string on the right side of the operator
+    int right_size = 0;
     for (int i = 0; count < commands_vect.size(); i++) {
         right_txt[i] = (char*)commands_vect.at(count).c_str();
 
@@ -73,9 +75,11 @@ bool Redir::execute() {
         //std::cout << "    count = " << count << std::endl;
 
         count++;
+        right_size++;
     }
-    count--;
-    right_txt[count] = NULL;
+    right_txt[right_size] = NULL;
+    // TEST REMOVE
+    //std::cout << "count = " << count << std::endl;
     
     int fd[2];
     if (cmd == "|") {
@@ -139,15 +143,15 @@ bool Redir::execute() {
                 dup2(fd[0], 0);
                 // "child does not need this end of hte pipe"
                 close(fd[1]);
-                if (execvp(args[0], args) < 0) {
-                    perror("Invalid command");
+                if (execvp(right_txt[0], right_txt) < 0) {
+                    perror("Pipe right command invalid");
                     return false;
                 }
             }
             if (pipe_pid > 0) {
                 dup2(fd[1], 1);
                 close(fd[0]);
-                if (execvp(right_txt[0], right_txt) < 0) {
+                if (execvp(args[0], args) < 0) {
                     perror("Invalid command");
                     return false;
                 }
