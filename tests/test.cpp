@@ -6,6 +6,9 @@
 #include "../src/headers/CompositeCom.h"
 #include "../src/headers/paren.h"
 // Tests tokenize function which takes a string of input and deliminates " " and "\n" and turns it into a vector of strings
+
+using namespace std;
+
 TEST(EchoTest, tokenize) {
     std::string test_string;
     test_string = "echo 1 && ((echo 2; echo 3) || echo 4)";
@@ -29,31 +32,49 @@ TEST(EchoTest, tokenize) {
 }
 
 TEST(EchoTest, bashTestOne){
-    char* test_val[4];
-    test_val[0] = "./rshell"; 
-    test_val[1] = "cat"; 
-    test_val[2] = "<";
-    test_val[3] = "test.txt";
+   vector<string> test_val;
+   test_val.push_back("./rshell");
+   test_val.push_back("cat");
+   test_val.push_back("<");
+   test_val.push_back("test.txt");
 
-    char* output_val[3];
+    // char* test_val[4];
+   // test_val[0] = "./rshell"; 
+   // test_val[1] = "cat"; 
+   // test_val[2] = "<";
+   // test_val[3] = "test.txt";
+
+   vector<string> output_val;
 
     ifstream dataFile;
     dataFile.open("test.txt");
     
-    for(int i = 0; i < 3; i++){
+       string a;
 
-        while (!dataFile.fail() && !dataFile().eof){
-            dataFile >> output_val[i];
+   // for(int i = 0; i < 3; i++){
+        while (!dataFile.fail() && !dataFile.eof()){
+            dataFile >> a;
+            output_val.push_back(a);
         }
+   // }
 
-    }
-
-    EXPECT_EQ("", output_val[0]);
+    EXPECT_EQ("", output_val.at(0));
 }
 
 
 TEST(EchoTest, bashTestTwo){
-    char* test_val[5];
+
+
+   vector<string> test_val;
+   test_val.push_back("./rshell");
+   test_val.push_back("echo");
+   test_val.push_back("hello");
+   test_val.push_back(">");
+   test_val.push_back("test.txt");
+
+   
+   
+   /*    char* test_val[5];
     test_val[0] = "./rshell"; 
     test_val[1] = "echo"; 
     test_val[2] = "hello";
@@ -62,54 +83,36 @@ TEST(EchoTest, bashTestTwo){
     //EXPECT_EQ("hello world", echo(3,test_val));
 
     char* output_val[3];
+*/
 
-
+   vector<string> output_val;
     ifstream dataFile;
     dataFile.open("test.txt");
 
-    for(int i = 0; i < 3; i++){
+     string b;
 
-        while (!dataFile.fail() && !dataFile().eof){
-            dataFile >> output_val[i];
+   // for(int i = 0; i < 3; i++){
+        while (!dataFile.fail() && !dataFile.eof()){
+            dataFile >> b;
+            output_val.push_back(b);
         }
-    }
-    EXPECT_EQ("hello", output_val[0]);
+   // }
+    EXPECT_EQ("hello", output_val.at(0));
 }
+
 
 
 TEST(EchoTest, bashTestThree){
-    char* test_val[6];
-    test_val[0] = "./rshell"; 
-    test_val[1] = "echo"; 
-    test_val[2] = "line";
-    test_val[3] = "2";
-    test_val[4] = ">>";
-    test_val[5] = "test.txt";
-
-    char* output_val[3];
-
-
-
-    ifstream dataFile;
-    dataFile.open("test.txt");
-
-   // if (dataFile.is_open(){
-    for(int i = 0; i < 3; i++){
-
-        while (!dataFile.fail() && !dataFile().eof){
-            dataFile >> output_val[i];
-        }
-    }
-    EXPECT_EQ("line", output_val[1]);
-   // }
-
-}
-
-
-
-
-TEST(EchoTest, bashTestFour){
-    char* test_val[3];
+  vector<string> test_val;
+      test_val.push_back("./rshell");
+      test_val.push_back("cat");
+      test_val.push_back("test.txt");
+      test_val.push_back("|");
+      test_val.push_back("tr");
+     test_val.push_back("a-z");
+    test_val.push_back("A-Z"); 
+   
+   /* char* test_val[3];
     test_val[0] = "./rshell"; 
     test_val[1] = "cat"; 
     test_val[2] = "test.txt";
@@ -119,17 +122,20 @@ TEST(EchoTest, bashTestFour){
     test_val[6] = "A-Z";
 
     char* output_val[3];
+*/
+    vector<string> output_val;
 
     ifstream dataFile;
     dataFile.open("test.txt");
 
-    for(int i = 0; i < 3; i++){
-
-        while (!dataFile.fail() && !dataFile().eof){
-            dataFile >> output_val[i];
+   // for(int i = 0; i < 3; i++){
+        string x;
+        while (!dataFile.fail() && !dataFile.eof()){
+            dataFile >> x;
+            output_val.push_back(x);;
         }
-    }
-    EXPECT_EQ("HELLO", output_val[0]);
+    //}
+    EXPECT_EQ("HELLO", output_val.at(0));
 }
 
 
