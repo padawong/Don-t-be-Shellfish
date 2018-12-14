@@ -34,7 +34,19 @@ TEST(EchoTest, bashTestOne){
     test_val[1] = "cat"; 
     test_val[2] = "<";
     test_val[3] = "test.txt";
-    //EXPECT_EQ("hello world", echo(3,test_val));
+
+    char* output_val[3];
+
+    ifstream dataFile("test.txt");
+    for(int i = 0; i < 3; i++){
+
+        while (!dataFile.fail() && !dataFile().eof){
+            dataFile >> output_val[i];
+        }
+
+    }
+
+    EXPECT_EQ("", output_val[0]);
 }
 
 
@@ -46,6 +58,19 @@ TEST(EchoTest, bashTestTwo){
     test_val[3] = ">";
     test_val[4] = "test.txt";
     //EXPECT_EQ("hello world", echo(3,test_val));
+
+    char* output_val[3];
+
+    ifstream dataFile("test.txt");
+    for(int i = 0; i < 3; i++){
+
+        while (!dataFile.fail() && !dataFile().eof){
+            dataFile >> output_val[i];
+        }
+
+    }
+
+    EXPECT_EQ("hello", output_val[0]);
 }
 
 
