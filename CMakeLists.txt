@@ -14,7 +14,7 @@ ADD_EXECUTABLE(rshell
     ./src/or_op.cpp
     ./src/semi_op.cpp
     ./src/paren.cpp
-    ./src/redir.cpp
+    ./src/redir_pipe.cpp
 )
 
 ADD_EXECUTABLE(test
@@ -27,7 +27,7 @@ ADD_EXECUTABLE(test
     ./src/or_op.cpp
     ./src/semi_op.cpp
     ./src/paren.cpp
-    ./src/redir.cpp
+    ./src/redir_pipe.cpp
 )
 
 TARGET_LINK_LIBRARIES(test gtest)
