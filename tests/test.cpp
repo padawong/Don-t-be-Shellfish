@@ -2,9 +2,9 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <fstream> 
 #include "../src/headers/CompositeCom.h"
 #include "../src/headers/paren.h"
-
 // Tests tokenize function which takes a string of input and deliminates " " and "\n" and turns it into a vector of strings
 TEST(EchoTest, tokenize) {
     std::string test_string;
@@ -30,14 +30,16 @@ TEST(EchoTest, tokenize) {
 
 TEST(EchoTest, bashTestOne){
     char* test_val[4];
-    test_val[0] = "./test"; 
+    test_val[0] = "./rshell"; 
     test_val[1] = "cat"; 
     test_val[2] = "<";
     test_val[3] = "test.txt";
 
     char* output_val[3];
 
-    ifstream dataFile("test.txt");
+    ifstream dataFile;
+    dataFile.open("test.txt");
+    
     for(int i = 0; i < 3; i++){
 
         while (!dataFile.fail() && !dataFile().eof){
@@ -52,7 +54,7 @@ TEST(EchoTest, bashTestOne){
 
 TEST(EchoTest, bashTestTwo){
     char* test_val[5];
-    test_val[0] = "./test"; 
+    test_val[0] = "./rshell"; 
     test_val[1] = "echo"; 
     test_val[2] = "hello";
     test_val[3] = ">";
@@ -61,44 +63,74 @@ TEST(EchoTest, bashTestTwo){
 
     char* output_val[3];
 
-    ifstream dataFile("test.txt");
+
+    ifstream dataFile;
+    dataFile.open("test.txt");
+
     for(int i = 0; i < 3; i++){
 
         while (!dataFile.fail() && !dataFile().eof){
             dataFile >> output_val[i];
         }
-
     }
-
     EXPECT_EQ("hello", output_val[0]);
 }
 
 
 TEST(EchoTest, bashTestThree){
     char* test_val[6];
-    test_val[0] = "./test"; 
+    test_val[0] = "./rshell"; 
     test_val[1] = "echo"; 
     test_val[2] = "line";
     test_val[3] = "2";
     test_val[4] = ">>";
     test_val[5] = "test.txt";
-    //EXPECT_EQ("hello world", echo(3,test_val));
+
+    char* output_val[3];
+
+
+
+    ifstream dataFile;
+    dataFile.open("test.txt");
+
+   // if (dataFile.is_open(){
+    for(int i = 0; i < 3; i++){
+
+        while (!dataFile.fail() && !dataFile().eof){
+            dataFile >> output_val[i];
+        }
+    }
+    EXPECT_EQ("line", output_val[1]);
+   // }
+
 }
+
+
+
 
 TEST(EchoTest, bashTestFour){
     char* test_val[3];
-    test_val[0] = "./test"; 
+    test_val[0] = "./rshell"; 
     test_val[1] = "cat"; 
     test_val[2] = "test.txt";
     test_val[3] = "|";
     test_val[4] = "tr";
     test_val[5] = "a-z";
     test_val[6] = "A-Z";
-    //EXPECT_EQ("hello world", echo(3,test_val));
+
+    char* output_val[3];
+
+    ifstream dataFile;
+    dataFile.open("test.txt");
+
+    for(int i = 0; i < 3; i++){
+
+        while (!dataFile.fail() && !dataFile().eof){
+            dataFile >> output_val[i];
+        }
+    }
+    EXPECT_EQ("HELLO", output_val[0]);
 }
-
-
-
 
 
 
