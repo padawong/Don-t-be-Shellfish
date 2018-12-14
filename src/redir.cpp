@@ -199,105 +199,6 @@ bool Redir::execute() {
     std::string op;
 
     int vect_index = 0;
-<<<<<<< HEAD
-
-    std::vector<std::string> temp_commands;
-
-    std::vector<std::vector<std::string> > all_commands;
-
-    while (commands_vect.size() > 0) {
-        if (commands_vect.at(0) == "<" || commands_vect.at(0) == ">" || commands_vect.at(0) == ">>" || commands_vect.at(0) == "|") {
-
-
-            if (commands_vect.at(0) == "<") {
-                fdin_cmd = true;
-                commands_vect.erase(commands_vect.begin());
-
-                in_file = commands_vect.at(0);
-            }
-            if (commands_vect.at(0) == ">" || commands_vect.at(0) == ">>") {
-                fdout_cmd = true;
-                op = commands_vect.at(0);
-                commands_vect.erase(commands_vect.begin());
-
-                out_file = commands_vect.at(0);
-            }
-
-            // Command fully stored into vector; move to next slot in vector
-            //vect_index++;
-            all_commands.push_back(temp_commands);
-
-            commands_vect.erase(commands_vect.begin());
-        }
-        
-        else {
-            temp_commands.push_back(commands_vect.at(0));
-            //all_commands.at(vect_index).push_back(commands_vect.at(0));
-            commands_vect.erase(commands_vect.begin());
-        }
-    }
-
-    if (fdin_cmd) {
-        char* file[1];
-        file[0] = (char*)in_file.c_str();
-        if ((fd_in = open(file[0], O_RDONLY, 0)) < 0) {
-            perror("Could not open input file");
-            return false;
-        }
-        //dup2(fd_in, STDIN_FILENO);
-        //close(fd_in);
-    }
-    else {
-        fd_in = dup(temp_in);
-    }
-
-
-
-    for (vect_index = 0; vect_index < all_commands.size(); vect_index++) {
-        dup2(fd_in, STDIN_FILENO);
-        close(fd_in);
-
-        // Last command
-        if (vect_index == all_commands.size() - 1) {
-            char* file[1];
-            file[0] = (char*)out_file.c_str();
-            // Output redirection
-            if (fdout_cmd) {
-                // Overwrite
-                if (op == ">") {
-                    fd_out = open(file[0], O_CREAT|O_TRUNC|O_WRONLY, 0644);
-                }
-
-                // Append
-                if (op == ">>") {
-                    fd_out = open(file[0], O_WRONLY|O_APPEND);
-                }
-
-                if (fd_out < 0) {
-                    perror("Could not open output file");
-                    return false;
-                }
-                            }
-            else {
-                fd_out = dup(temp_out);
-            }
-        }
-
-        // Not last command
-        else {
-            // create pipe
-            // Setup for piping
-            int fd[2];
-            if (pipe(fd) < 0) {
-                perror("Pipe failed");
-                return false;
-            }
-
-            fd_in = fd[0];
-            fd_out = fd[1];
-            
-        } 
-=======
 
     std::vector<std::string> temp_commands;
 
@@ -462,6 +363,7 @@ bool Redir::execute() {
                 close(fd[0]);
             }*/
        }
+<<<<<<< HEAD
 
         count++;
     }
@@ -542,6 +444,9 @@ bool Redir::execute() {
             }*/
        }
 
+=======
+
+>>>>>>> 63e6beb2f856197c2ef56c38ae24370471aed332
         count++;
     }
 
@@ -552,6 +457,9 @@ bool Redir::execute() {
     close(temp_out);
 
 
+<<<<<<< HEAD
+=======
+>>>>>>> 63e6beb2f856197c2ef56c38ae24370471aed332
 =======
 >>>>>>> 63e6beb2f856197c2ef56c38ae24370471aed332
     return true;
