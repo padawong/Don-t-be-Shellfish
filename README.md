@@ -1,5 +1,14 @@
-﻿# Hw3
- # Assignment 3: README
+﻿#Assignment 4:
+
+Chaining does not work at all.
+Single redirections/pipes work fine
+Error handling for single redir/pipes seems to also be fine
+Seems to integrate fine with old functionality
+
+One new file src/redir_pipe.cpp which deals with all redirection and piping
+
+# Hw3
+Assignment 3: README
  
 KNOWN BUGS: exit doesn't work very well. When it's chained with commands it doesn't seem to work when the commands are too long
 If a valid execvp command is followed by bad variable, it won't flag as false
