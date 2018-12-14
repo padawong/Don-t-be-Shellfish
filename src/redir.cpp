@@ -207,7 +207,6 @@ bool Redir::execute() {
     while (commands_vect.size() > 0) {
         if (commands_vect.at(0) == "<" || commands_vect.at(0) == ">" || commands_vect.at(0) == ">>" || commands_vect.at(0) == "|") {
 
-
             if (commands_vect.at(0) == "<") {
                 fdin_cmd = true;
                 commands_vect.erase(commands_vect.begin());
@@ -226,6 +225,12 @@ bool Redir::execute() {
             //vect_index++;
             all_commands.push_back(temp_commands);
 
+
+            std::cout << "temp_commands.at(0) = " << temp_commands.at(0) << std::endl;
+
+
+
+            temp_commands.clear();
             commands_vect.erase(commands_vect.begin());
         }
         
@@ -235,6 +240,7 @@ bool Redir::execute() {
             commands_vect.erase(commands_vect.begin());
         }
     }
+    all_commands.push_back(temp_commands);
 
     if (fdin_cmd) {
         char* file[1];
@@ -249,7 +255,6 @@ bool Redir::execute() {
     else {
         fd_in = dup(temp_in);
     }
-
 
 
     for (vect_index = 0; vect_index < all_commands.size(); vect_index++) {
@@ -281,21 +286,28 @@ bool Redir::execute() {
                 fd_out = dup(temp_out);
             }
         }
-
+/*
         // Not last command
         else {
             // create pipe
             // Setup for piping
-            int fd[2];
-            if (pipe(fd) < 0) {
+ */ /*          if (pipe(fd) < 0) {
                 perror("Pipe failed");
                 return false;
             }
 
             fd_in = fd[0];
             fd_out = fd[1];
-        } 
+*//*
+            // Convert command to char* arrays
+            char* right_command[all_commands.at(vect_index + 1).size() + 1];
+            for (int i = 0; i < all_commands.at(vect_index + 1).size(); i++) {
+                right_command[i] = (char*)all_commands.at(vect_index + 1).at(i).c_str();
+            }
+            right_command[all_commands.at(vect_index + 1).size()] = NULL;
+        }*/ 
 
+        int fd[2];
         // Redirect output
         dup2(fd_out, STDOUT_FILENO);
         close(fd_out);
@@ -307,6 +319,7 @@ bool Redir::execute() {
         char* command[all_commands.at(vect_index).size() + 1];
         for (int i = 0; i < all_commands.at(vect_index).size(); i++) {
             command[i] = (char*)all_commands.at(vect_index).at(i).c_str();
+            std::cout << "command at " << i << " = " << command[i] << std::endl;
         }
         command[all_commands.at(vect_index).size()] = NULL;
 
@@ -342,9 +355,53 @@ bool Redir::execute() {
 
         // Run current command batch
         if (pid == 0) {
-            if (execvp(command[0], command) < 0) {
-            perror("Invalid command");
-                return false;
+            // TEST REMOVE
+            std::cout << "vect_index = " << vect_index << std::endl;
+            std::cout << "all_commands.size() + 1 = " << all_commands.size() + 1 << std::endl;
+            std::cout << "all_commands.at(vect_index + 1).at(0) = " << all_commands.at(vect_index + 1).at(0) << std::endl;
+            if (vect_index < all_commands.size() + 1) {
+                char* right_command[all_commands.at(vect_index + 1).size() + 1];
+                for (int i = 0; i < all_commands.at(vect_index + 1).size(); i++) {
+                    right_command[i] = (char*)all_commands.at(vect_index + 1).at(i).c_str();
+                    std::cout << "right_command at " << i << " = " << right_command[i] << std::endl;
+                }
+                right_command[all_commands.at(vect_index + 1).size()] = NULL;
+                
+                pid_t pipe_pid = fork();
+
+                if (pipe_pid < 0) {
+                    perror("Fork failed");
+                    return false;
+                }
+                if (pipe_pid == 0) {            
+                    dup2(fd[0], 0);
+                    // "child does not need this end of hte pipe"
+                    close(fd[1]);
+                    if (execvp(right_command[0], right_command) < 0) {
+                        perror("Pipe right command invalid");
+                        return false;
+                    }
+                }
+                if (pipe_pid > 0) {
+                    dup2(fd[1], 1);
+                    close(fd[0]);
+                    if (execvp(command[0], command) < 0) {
+                        perror("Invalid command within pipe");
+                        return false;
+                    }
+                    /*if (waitpid(0, NULL, 0) == -1) {
+                        perror("Parent wait failed");
+                        return false;
+                    }*/
+                }
+            }
+
+
+            else {
+                if (execvp(command[0], command) < 0) {
+                    perror("Invalid command");
+                    return false;
+                }
             }
         }
         
@@ -363,105 +420,7 @@ bool Redir::execute() {
                 close(fd[0]);
             }*/
        }
-<<<<<<< HEAD
-
-        count++;
     }
-
-    // Restore default in/out
-    dup2(temp_in, 0);
-    dup2(temp_out, 1);
-    close(temp_in);
-    close(temp_out);
->>>>>>> 63e6beb2f856197c2ef56c38ae24370471aed332
-
-        // Redirect output
-        dup2(fd_out, STDOUT_FILENO);
-        close(fd_out);
-
-<<<<<<< HEAD
-        // TEST REMOVE
-        //std::cout << "about to convert command to char*" << std::endl;
-        
-        // Convert command to char* arrays
-        char* command[all_commands.at(vect_index).size() + 1];
-        for (int i = 0; i < all_commands.at(vect_index).size(); i++) {
-            command[i] = (char*)all_commands.at(vect_index).at(i).c_str();
-        }
-        command[all_commands.at(vect_index).size()] = NULL;
-
-        // TEST REMOVE
-        //std::cout << "Finished converting command to char*" << std::endl;
-/*
-        vect_index++;
-
-        char* right_cmd[all_commands.at(vect_index).size() + 1];
-        for (int i = 0; i < all_commands.at(vect_index).size(); i++) {
-            right_txt[i] = (char*)all_commands.at(vect_index).at(i).c_str();
-        }
-        right_txt[right_in.size()] = NULL;
-        */
-        // TEST REMOVE
-/*        for (int i = 0; i < command_in.size(); i++) {
-           // std::cout << "command_in[" << i << "] = " << command_in.at(i) << std::endl;
-            std::cout << "command[" << i << "] = " << command[i] << std::endl;
-        }
-        for (int i = 0; i < right_in.size(); i++) {
-           // std::cout << "right_in[" << i << "] = " << right_in.at(i) << std::endl;
-            std::cout << "right_txt[" << i << "] = " << right_txt[i] << std::endl;
-        }
-*/
-
-
-        pid_t pid = fork();
-
-        if (pid < 0) {
-            perror("Fork failed");
-            return false;
-        }
-
-        // Run current command batch
-        if (pid == 0) {
-            if (execvp(command[0], command) < 0) {
-            perror("Invalid command");
-                return false;
-            }
-        }
-        
-        if (pid > 0) {
-        // since child pid = 0, we are waiting for child = 0
-           if (waitpid(0, NULL, 0) == -1) {
-                //success = false;
-                
-                perror("Parent wait failed");
-                return false;
-            }
-            /* 
-            if (cmd == "|") {
-                //write(
-                dup2(fd[1], 1);
-                close(fd[0]);
-            }*/
-       }
-
-=======
-
->>>>>>> 63e6beb2f856197c2ef56c38ae24370471aed332
-        count++;
-    }
-
-    // Restore default in/out
-    dup2(temp_in, 0);
-    dup2(temp_out, 1);
-    close(temp_in);
-    close(temp_out);
-
-
-<<<<<<< HEAD
-=======
->>>>>>> 63e6beb2f856197c2ef56c38ae24370471aed332
-=======
->>>>>>> 63e6beb2f856197c2ef56c38ae24370471aed332
     return true;
 }
 
