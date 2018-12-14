@@ -28,6 +28,58 @@ TEST(EchoTest, tokenize) {
     delete test_com;
 }
 
+TEST(EchoTest, bashTestOne){
+    char* test_val[4];
+    test_val[0] = "./test"; 
+    test_val[1] = "cat"; 
+    test_val[2] = "<";
+    test_val[3] = "test.txt";
+    //EXPECT_EQ("hello world", echo(3,test_val));
+}
+
+
+TEST(EchoTest, bashTestTwo){
+    char* test_val[5];
+    test_val[0] = "./test"; 
+    test_val[1] = "echo"; 
+    test_val[2] = "hello";
+    test_val[3] = ">";
+    test_val[4] = "test.txt";
+    //EXPECT_EQ("hello world", echo(3,test_val));
+}
+
+
+TEST(EchoTest, bashTestThree){
+    char* test_val[6];
+    test_val[0] = "./test"; 
+    test_val[1] = "echo"; 
+    test_val[2] = "line";
+    test_val[3] = "2";
+    test_val[4] = ">>";
+    test_val[5] = "test.txt";
+    //EXPECT_EQ("hello world", echo(3,test_val));
+}
+
+TEST(EchoTest, bashTestFour){
+    char* test_val[3];
+    test_val[0] = "./test"; 
+    test_val[1] = "cat"; 
+    test_val[2] = "test.txt";
+    test_val[3] = "|";
+    test_val[4] = "tr";
+    test_val[5] = "a-z";
+    test_val[6] = "A-Z";
+    //EXPECT_EQ("hello world", echo(3,test_val));
+}
+
+
+
+
+
+
+
+
+
 // Tests that parse correctly generates first_cmd->right
 // Does so by checking that first_cmd->right->commands_vect holds the command
 TEST(EchoTest, parse_single) {
