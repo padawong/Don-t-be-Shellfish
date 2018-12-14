@@ -294,6 +294,7 @@ bool Redir::execute() {
 
             fd_in = fd[0];
             fd_out = fd[1];
+            
         } 
 
         // Redirect output
