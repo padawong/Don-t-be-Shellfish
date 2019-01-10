@@ -1,0 +1,24 @@
+The purpose of this file is to keep track of development progress and temporary issues prior to submission. 
+
+main.cpp will be short and sweet, primarily calling functions written elsewhere. My understanding is that this is supposed to make debugging way easier and be better practice in general.
+
+The structure of the code that we created in Assn1 is DEFINITELY going to change. Minor notes will be made here about general structure, but changes to the UML diagram should still be done on paper then updated for better readability.
+
+WORK IN PROGRESS:
+- Currently watching youtube videos and reading articles about syscalls (fork, execvp, waitpid) to understand how they come into play in this assignment.
+- Self-loathing for not beginning this assignment earlier
+- Redesigning UML & general structure based on deeper understanding of syscalls
+- Distinguishing between bash commands that are PATH executables and commands that are "built-in to bash"
+  + My understanding so far is basically that we will not need to implement anything that requires changing folders.
+  + Current resource for understanding PATH: https://astrobiomike.github.io/bash/modifying_your_path
+  // + Current resource for bash commands: https://courses.cs.washington.edu/courses/cse391/16sp/bash.html
+  + v2 Current resource for bin/ commands; Are these all the commands we need? Are these all of the PATH executables or is that something else?: https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch03s04.html
+
+
+
+PARSING THE COMPOSITES
+strtok - delimiter is ' '
+Test each string to see if:
+    1. first char is & or |
+     OR
+    2. LAST char is ';' (use string.size() - 1 unless it's a char pointer in which case oh no; wait nvm because we can cast char*[] to string rather easily using: https://stackoverflow.com/questions/1195675/convert-a-char-to-stdstring)
